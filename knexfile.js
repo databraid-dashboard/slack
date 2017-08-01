@@ -6,13 +6,23 @@ module.exports = {
     connection: 'postgres://localhost/slack_dev'
   },
 
-  docker_dev: {
-    client: 'postgresql',
-    connection: {
-      database: 'postgres',
-      user: 'postgres',
-      host: 'postgres',
-    },
+  test: {
+    client: 'pg',
+    connection: 'postgres://localhost/slack_test',
   },
+
+  production: {
+    client: 'pg',
+    connection: process.env.DATABASE_URL,
+  }
+
+  // docker_dev: {
+  //   client: 'postgresql',
+  //   connection: {
+  //     database: 'postgres',
+  //     user: 'postgres',
+  //     host: 'postgres',
+  //   },
+  // },
 
 };

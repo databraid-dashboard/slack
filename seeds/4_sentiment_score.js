@@ -1,3 +1,4 @@
+'use strict';
 
 exports.seed = function(knex) {
   return knex('sentiment_score').del()
