@@ -1,11 +1,11 @@
-'use strict';
-
-process.env.NODE_ENV = 'development';
-
-const assert = require('chai').assert;
-const { suite, test } = require('mocha');
-const knex = require('../knex');
-const { addDatabaseHooks } = require('./utils')
+// 'use strict';
+//
+// process.env.NODE_ENV = 'development';
+//
+// const assert = require('chai').assert;
+// const { suite, test } = require('mocha');
+// const knex = require('../knex');
+// const { addDatabaseHooks } = require('./utils')
 
 // suite('seeds', addDatabaseHooks(() => {
 //   test('users rows', (done) => {
