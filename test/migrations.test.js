@@ -109,7 +109,6 @@ suite('migrations', addDatabaseHooks(() => {
           },
 
           score: {
-            //how to test decimal, not integer
             type: 'numeric',
             maxLength: null,
             nullable: false,
@@ -117,7 +116,6 @@ suite('migrations', addDatabaseHooks(() => {
           },
 
           magnitude: {
-            //how to test float, not integer
             type: 'real',
             maxLength: null,
             nullable: false,

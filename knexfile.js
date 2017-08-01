@@ -1,11 +1,14 @@
 'use strict';
 
 module.exports = {
-  //TODO: potentially don't need this... ?
-  // development: {
-  //   client: 'pg',
-  //   connection: 'postgres@postgres://postgres/slack_dev'
-  // },
+  docker_dev: {
+    client: 'postgresql',
+    connection: {
+      database: 'postgres',
+      user: 'postgres',
+      host: 'postgres',
+    },
+  },
 
   test: {
     client: 'postgresql',
@@ -20,14 +23,4 @@ module.exports = {
     client: 'pg',
     connection: process.env.DATABASE_URL,
   },
-
-  docker_dev: {
-    client: 'postgresql',
-    connection: {
-      database: 'postgres',
-      user: 'postgres',
-      host: 'postgres',
-    },
-  },
-
 };
