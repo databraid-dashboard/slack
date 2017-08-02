@@ -189,25 +189,18 @@ suite('migrations', addDatabaseHooks(() => {
             defaultValue: null,
           },
 
+          message_timestamp: {
+            type: 'timestamp with time zone',
+            maxLength: null,
+            nullable: false,
+            defaultValue: null,
+          },
+
           message: {
             type: 'text',
             maxLength: null,
             nullable: false,
             defaultValue: '\'\'::text',
-          },
-
-          created_at: {
-            type: 'timestamp with time zone',
-            maxLength: null,
-            nullable: false,
-            defaultValue: 'now()',
-          },
-
-          updated_at: {
-            type: 'timestamp with time zone',
-            maxLength: null,
-            nullable: false,
-            defaultValue: 'now()',
           },
         };
 
