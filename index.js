@@ -1,39 +1,36 @@
 const express = require('express');
-const knex = require('./knex');
+const path = require('path');
+
 const bodyParser = require('body-parser');
 
+const index = require('./routes/index');
+const users = require('./routes/users');
+
 const app = express();
-const PORT = process.env.PORT || 8000;
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', (req, res) => {
-  res.send('aok');
+app.use('/', index);
+app.use('/users', users);
+
+// catch 404 and forward to error handler
+app.use((req, res, next) => {
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
-app.get('/users', (req, res) => {
-  knex('users').select()
-    .then((users) => {
-      res.json(users);
-    });
+// error handler
+app.use((err, req, res) => {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
 });
 
-app.post('/users', (req, res) => {
-  const name = req.body.name;
-  knex('users').insert({ name }, '*')
-    .then((user) => {
-      res.json(user);
-    })
-    .catch((err) => {
-      res.status(500).send(`There was an error adding the user: ${err}`);
-    });
-});
-
-app.use((req, res) => {
-  res.sendStatus(404);
-});
-
-app.listen(PORT, () => {
-  /* eslint-disable no-console */
-  console.log(`Express server listening on port ${PORT}`);
-});
+module.exports = app;
