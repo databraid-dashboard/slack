@@ -11,8 +11,7 @@
     "rollback": "scripts/rollback",
     "latest": "scripts/latest",
     "seed": "scripts/seed",
-    "lint": "scripts/lint",
-    "knex": "knex"
+    "lint": "scripts/lint"
   },
   "author": "",
   "license": "MIT",
