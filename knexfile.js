@@ -1,7 +1,6 @@
-// Update with your config settings.
+
 
 module.exports = {
-
   docker_dev: {
     client: 'postgresql',
     connection: {
@@ -11,4 +10,17 @@ module.exports = {
     },
   },
 
+  test: {
+    client: 'postgresql',
+    connection: {
+      database: 'slack_test',
+      user: 'postgres',
+      host: 'postgres',
+    },
+  },
+
+  production: {
+    client: 'pg',
+    connection: process.env.DATABASE_URL,
+  },
 };
