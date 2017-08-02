@@ -1,3 +1,11 @@
+before (() => {
+  process.env.NODE_ENV = 'test';
+});
+
+after(() => {
+  process.env.NODE_ENV = 'docker_dev';
+});
+
 const assert = require('chai').assert;
 const { suite, test } = require('mocha');
 const knex = require('../knex');
