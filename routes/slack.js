@@ -17,23 +17,21 @@ router.get('/auth/redirect', (req, res) => {
   request(options, (error, response, body) => {
     const JSONresponse = JSON.parse(body);
     if (!JSONresponse.ok) {
-      console.log(JSONresponse);
       res.send(`Error encountered: \n${JSON.stringify(JSONresponse)}`).status(200).end();
     } else {
-      console.log(JSONresponse);
       res.send('Success!');
     }
   });
 });
 
-router.post('/auth', (req, res) => {
-  /* eslint-disable no-console */
-  console.log(req.body);
-  res.send('SLACK');
+router.get('/auth', (req, res) => {
+  res.sendFile(`${__dirname}/add_to_slack.html`);
 });
 
-router.get('/', (req, res) => {
-  res.sendFile(`${__dirname}/add_to_slack.html`);
+router.post('/events', (req, res) => {
+  /* eslint-disable no-console */
+  console.log(req.body);
+  res.send('SLACK!');
 });
 
 
