@@ -1,0 +1,40 @@
+const express = require('express');
+const request = require('request');
+
+const router = express.Router();
+
+
+router.get('/auth/redirect', (req, res) => {
+  const options = {
+    uri: `https://slack.com/api/oauth.access?code=${
+      req.query.code
+    }&client_id=${process.env.SLACK_CLIENT_ID
+    }&client_secret=${process.env.SLACK_CLIENT_SECRET
+    }&redirect_uri=${process.env.REDIRECT_URI}`,
+    method: 'GET',
+  };
+
+  request(options, (error, response, body) => {
+    const JSONresponse = JSON.parse(body);
+    if (!JSONresponse.ok) {
+      console.log(JSONresponse);
+      res.send(`Error encountered: \n${JSON.stringify(JSONresponse)}`).status(200).end();
+    } else {
+      console.log(JSONresponse);
+      res.send('Success!');
+    }
+  });
+});
+
+router.post('/auth', (req, res) => {
+  /* eslint-disable no-console */
+  console.log(req.body);
+  res.send('SLACK');
+});
+
+router.get('/', (req, res) => {
+  res.sendFile(`${__dirname}/add_to_slack.html`);
+});
+
+
+module.exports = router;
