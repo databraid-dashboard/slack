@@ -188,13 +188,6 @@ suite('migrations', addDatabaseHooks(() => {
             defaultValue: null,
           },
 
-          message_id: {
-            type: 'integer',
-            maxLength: null,
-            nullable: false,
-            defaultValue: null,
-          },
-
           message_timestamp: {
             type: 'timestamp with time zone',
             maxLength: null,

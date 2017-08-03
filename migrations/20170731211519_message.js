@@ -12,7 +12,6 @@ exports.up = knex => knex.schema.createTable('message', (table) => {
     .inTable('channel_map')
     .onDelete('CASCADE')
     .index();
-  table.integer('message_id').notNullable();
   table.dateTime('message_timestamp').notNullable();
   table.text('message').notNullable().defaultTo('');
 });
