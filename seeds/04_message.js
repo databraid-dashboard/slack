@@ -40,4 +40,7 @@ exports.seed = knex => knex('message').del()
       message_timestamp: new Date(1501628043.643661 * 1000),
       message: 'This is the last message I will add.',
     },
-  ]));
+  ]))
+  .then(function(){
+    return knex.raw(`SELECT setval('message_id_seq', (SELECT MAX(id) FROM message))`)
+  });

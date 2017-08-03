@@ -15,20 +15,21 @@ const sentimentRepo = new SentimentRepository();
 //       res.status(500).send(err));
 //   });
 
+function fetchMessagesAndAnalyzeSentiment(channelId) {
+  sentimentRepo.fetchMessageBatch(channelId)
+    .then(messages => {
+      let messagesArray = messages.map(msgObject => msgObject.message);
+      let numberOfMessages = messagesArray.length;
+      let messageString = messagesArray.join('\n');
+      analyzeSentimentOfText(messageString, channelId, numberOfMessages);
+    })
+    .catch((err) => {
+      console.error('ERROR:', err);
+    });
+}
 
-sentimentRepo.fetchMessageBatch(channelId)
-  .then(messages => {
-    let messagesArray = messages.map(msgObject => msgObject.message);
-    let numberOfMessages = messagesArray.length;
-    let messageString = messagesArray.join('\n');
-    analyzeSentimentOfText(messageString, numberOfMessages);
-  })
-  .catch((err) => {
-    console.error('ERROR:', err);
-  });
 
-
-function analyzeSentimentOfText (messageString, numberOfMessages) {
+function analyzeSentimentOfText (messageString, channelId, numberOfMessages) {
   const Language = require('@google-cloud/language');
   const language = Language();
 
@@ -38,12 +39,10 @@ function analyzeSentimentOfText (messageString, numberOfMessages) {
   };
 
   return language.analyzeSentiment({ document: document })
-    .then((results) => {
-      fetchChannelId();
-
+    .then(results => {
       const sentimentScore = results[0].documentSentiment.score;
       const magnitudeScore = results[0].documentSentiment.magnitude;
-      sentimentRepo.addSentimentScore(sentimentScore, magnitudeScore, numberOfMessages);
+      return sentimentRepo.addSentimentScore(sentimentScore, magnitudeScore, channelId, numberOfMessages);
 //
 //       // const sentiment = results[0].documentSentiment;
 //       // console.log(`Document sentiment:`);
@@ -57,11 +56,13 @@ function analyzeSentimentOfText (messageString, numberOfMessages) {
 //       //   console.log(`  Magnitude: ${sentence.sentiment.magnitude}`);
 //       // });
     })
+    .then(results => {
+      let newScoreData = camelizeKeys(results[0]);
+      console.log(newScoreData);
+    })
     .catch((err) => {
       console.error('ERROR:', err);
     });
 }
-
-fetchChannelId();
 
 module.exports = router;
