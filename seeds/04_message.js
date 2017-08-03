@@ -14,7 +14,7 @@ exports.seed = knex => knex('message').del()
       channel_map_id: 1,
       message_id: 1004,
       message_timestamp: new Date(1501625043.643661 * 1000),
-      message: 'This is another message. This is different than the last message.',
+      message: 'This is a great new message. This is different than the last message.',
     },
     {
       id: 3,
@@ -22,7 +22,7 @@ exports.seed = knex => knex('message').del()
       channel_map_id: 1,
       message_id: 1005,
       message_timestamp: new Date(1501626043.643661 * 1000),
-      message: 'blahhhh blah blah. Look at this message. It is sooooo cool.',
+      message: 'Happy things! Look at this message. It is sooooo cool.',
     },
     {
       id: 4,
