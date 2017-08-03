@@ -25,12 +25,12 @@ router.get('/auth/redirect', (req, res) => {
 });
 
 router.get('/auth', (req, res) => {
-  res.sendFile(`${__dirname}/add_to_slack.html`);
+  res.sendFile(`/app/assets/html/add_to_slack.html`);
 });
 
 router.post('/events', (req, res) => {
   /* eslint-disable no-console */
-  console.log(req.body);
+  console.log(req.body.event);
   res.send('SLACK!');
 });
 
