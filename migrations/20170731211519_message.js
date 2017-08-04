@@ -12,9 +12,9 @@ exports.up = knex => knex.schema.createTable('message', (table) => {
     .inTable('channel_map')
     .onDelete('CASCADE')
     .index();
-  table.integer('message_id').notNullable();
+  table.string('raw_ts', 20).notNullable();
+  table.dateTime('message_timestamp').notNullable();
   table.text('message').notNullable().defaultTo('');
-  table.timestamps(true, true);
 });
 
 exports.down = knex => knex.schema.dropTable('message');

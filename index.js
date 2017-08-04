@@ -1,4 +1,8 @@
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+  /* eslint-disable global-require */
+  require('dotenv').config();
+}
+
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -33,9 +37,11 @@ app.use((err, req, res) => {
   res.render('error');
 });
 
-app.listen(PORT, () => {
-  /* eslint-disable no-console */
-  console.log(`Express server listening on port ${PORT}`);
+app.listen(port, () => {
+  if (app.get('env') !== 'test') {
+    /* eslint-disable no-console */
+    console.log('Listening on port', port);
+  }
 });
 
 module.exports = app;
