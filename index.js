@@ -9,13 +9,9 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-const sentiment = require('./src/sentiment');
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/sentiment', sentiment);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

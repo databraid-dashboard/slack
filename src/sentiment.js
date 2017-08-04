@@ -1,11 +1,14 @@
-const express = require('express');
+if (process.env.NODE_ENV !== 'production') {
+  /* eslint-disable global-require */
+  console.log(require('dotenv').config());
+}
+
 const { camelizeKeys } = require('humps');
 const Language = require('@google-cloud/language');
+const { fetchMessageBatch, addSentimentScore } = require('../repositories/sentiment-repository');
 
-const router = express.Router();
 const language = Language();
 
-const { fetchMessageBatch, addSentimentScore } = require('../repositories/sentiment-repository');
 
 function analyzeSentimentOfText(messageString, channelId, numberOfMessages) {
   const document = {
@@ -26,7 +29,7 @@ function analyzeSentimentOfText(messageString, channelId, numberOfMessages) {
     })
     .then((results) => {
       const newScoreData = camelizeKeys(results[0]);
-      return newScoreData;
+      return newScoreData.score;
     })
     .catch(err => err);
 }
@@ -44,4 +47,4 @@ function analyzeSentimentAndSaveScore(channelId) {
 
 analyzeSentimentAndSaveScore(1);
 
-module.exports = router;
+module.exports = { analyzeSentimentAndSaveScore, analyzeSentimentOfText };
