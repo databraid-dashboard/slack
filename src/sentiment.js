@@ -35,7 +35,8 @@ function analyzeSentimentOfText(messageString, channelId, numberOfMessages) {
 
 function analyzeSentimentAndSaveScore(channelId) {
   fetchMessageBatch(channelId)
-    .then((messages) => {
+    .then(messages => {
+      console.log('made it here');
       const messagesArray = messages.map(msgObject => msgObject.message);
       const numberOfMessages = messagesArray.length;
       const messageString = messagesArray.join('\n');
