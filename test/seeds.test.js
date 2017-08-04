@@ -1,7 +1,9 @@
-before (() => {
+/* eslint-disable no-undef */
+before(() => {
   process.env.NODE_ENV = 'test';
 });
 
+/* eslint-disable no-undef */
 after(() => {
   process.env.NODE_ENV = 'docker_dev';
 });

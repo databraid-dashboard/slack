@@ -1,68 +1,47 @@
 const express = require('express');
-const { camelizeKeys, decamelizeKeys } = require('humps');
-const rp = require('request-promise');
+const { camelizeKeys } = require('humps');
+const Language = require('@google-cloud/language');
 
 const router = express.Router();
+const language = Language();
 
-const SentimentRepository = require('../repositories/sentiment-repository');
-const sentimentRepo = new SentimentRepository();
+const { fetchMessageBatch, addSentimentScore } = require('../repositories/sentiment-repository');
 
-// router.get('/', (req, res) => {
-//    sentimentRepo.fetchMessageBatch(847630912).then((messages) => {
-//      res.send(camelizeKeys(messages));
-//     })
-//     .catch(err =>
-//       res.status(500).send(err));
-//   });
-
-function fetchMessagesAndAnalyzeSentiment(channelId) {
-  sentimentRepo.fetchMessageBatch(channelId)
-    .then(messages => {
-      let messagesArray = messages.map(msgObject => msgObject.message);
-      let numberOfMessages = messagesArray.length;
-      let messageString = messagesArray.join('\n');
-      analyzeSentimentOfText(messageString, channelId, numberOfMessages);
-    })
-    .catch((err) => {
-      console.error('ERROR:', err);
-    });
-}
-
-
-function analyzeSentimentOfText (messageString, channelId, numberOfMessages) {
-  const Language = require('@google-cloud/language');
-  const language = Language();
-
+function analyzeSentimentOfText(messageString, channelId, numberOfMessages) {
   const document = {
-    'content': messageString,
-    'type': 'PLAIN_TEXT'
+    content: messageString,
+    type: 'PLAIN_TEXT',
   };
 
-  return language.analyzeSentiment({ document: document })
-    .then(results => {
+  return language.analyzeSentiment({ document })
+    .then((results) => {
       const sentimentScore = results[0].documentSentiment.score;
       const magnitudeScore = results[0].documentSentiment.magnitude;
-      return sentimentRepo.addSentimentScore(sentimentScore, magnitudeScore, channelId, numberOfMessages);
-//
-//       // const sentiment = results[0].documentSentiment;
-//       // console.log(`Document sentiment:`);
-//       // console.log(`  Score: ${sentiment.score}`);
-//       // console.log(`  Magnitude: ${sentiment.magnitude}`);
-//       //
-//       // const sentences = results[0].sentences;
-//       // sentences.forEach((sentence) => {
-//       //   console.log(`Sentence: ${sentence.text.content}`);
-//       //   console.log(`  Score: ${sentence.sentiment.score}`);
-//       //   console.log(`  Magnitude: ${sentence.sentiment.magnitude}`);
-//       // });
+      return addSentimentScore(
+        sentimentScore,
+        magnitudeScore,
+        channelId,
+        numberOfMessages,
+      );
     })
-    .then(results => {
-      let newScoreData = camelizeKeys(results[0]);
-      console.log(newScoreData);
+    .then((results) => {
+      const newScoreData = camelizeKeys(results[0]);
+      return newScoreData;
     })
-    .catch((err) => {
-      console.error('ERROR:', err);
-    });
+    .catch(err => err);
 }
+
+function analyzeSentimentAndSaveScore(channelId) {
+  fetchMessageBatch(channelId)
+    .then((messages) => {
+      const messagesArray = messages.map(msgObject => msgObject.message);
+      const numberOfMessages = messagesArray.length;
+      const messageString = messagesArray.join('\n');
+      analyzeSentimentOfText(messageString, channelId, numberOfMessages);
+    })
+    .catch(err => err);
+}
+
+analyzeSentimentAndSaveScore(1);
 
 module.exports = router;

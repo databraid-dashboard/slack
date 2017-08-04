@@ -1,24 +1,18 @@
 if (process.env.NODE_ENV !== 'production') {
+  /* eslint-disable global-require */
   require('dotenv').config();
 }
 
 const express = require('express');
 const path = require('path');
-// const favicon = require('serve-favicon');
-// const logger = require('morgan');
-// const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
 const app = express();
 
 const sentiment = require('./src/sentiment');
 
-// uncomment after placing your favicon in /public
-// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-// app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/sentiment', sentiment);
