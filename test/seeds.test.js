@@ -33,6 +33,11 @@ suite('seeds', addDatabaseHooks(() => {
             user_id: 'c548310h',
             user_name: '@colonelforbin',
           },
+          {
+            id: 4,
+            user_id: 'U6FMJ3J3Z',
+            user_name: '@dave.gallup',
+          },
         ];
 
         expected.forEach((row, i) => {
@@ -63,6 +68,11 @@ suite('seeds', addDatabaseHooks(() => {
             id: 2,
             channel_id: 'z63492017x',
             channel_name: '#other_channel',
+          },
+          {
+            id: 3,
+            channel_id: 'C6DUVSW3A',
+            channel_name: '#dev',
           },
         ];
 
