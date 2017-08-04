@@ -8,7 +8,7 @@ const { fetchMessageBatch, addSentimentScore } = require('../repositories/sentim
 
 const language = Language();
 
-function analyzeSentimentAndSaveScore(channelId) {
+export default function analyzeSentimentAndSaveScore(io, channelId) {
   let numberOfMessages;
 
   fetchMessageBatch(channelId)
@@ -38,7 +38,3 @@ function analyzeSentimentAndSaveScore(channelId) {
     .then(scoreData => console.log(scoreData[0].score))
     .catch(err => err);
 }
-
-analyzeSentimentAndSaveScore(1);
-
-module.exports = { analyzeSentimentAndSaveScore };
