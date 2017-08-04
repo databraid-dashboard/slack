@@ -8,16 +8,26 @@ const { fetchMessageBatch, addSentimentScore } = require('../repositories/sentim
 
 const language = Language();
 
-function analyzeSentimentOfText(messageString, channelId, numberOfMessages) {
-  const document = {
-    content: messageString,
-    type: 'PLAIN_TEXT',
-  };
+function analyzeSentimentAndSaveScore(channelId) {
+  let numberOfMessages;
 
-  return language.analyzeSentiment({ document })
-    .then((results) => {
-      const sentimentScore = results[0].documentSentiment.score;
-      const magnitudeScore = results[0].documentSentiment.magnitude;
+  fetchMessageBatch(channelId)
+    .then((messages) => {
+      const messagesArray = messages.map(msgObject => msgObject.message);
+      const messageString = messagesArray.join('\n');
+      numberOfMessages = messagesArray.length;
+      return messageString;
+    })
+    .then((messageString) => {
+      const document = {
+        content: messageString,
+        type: 'PLAIN_TEXT',
+      };
+      return language.analyzeSentiment({ document });
+    })
+    .then((analysisResults) => {
+      const sentimentScore = analysisResults[0].documentSentiment.score;
+      const magnitudeScore = analysisResults[0].documentSentiment.magnitude;
       return addSentimentScore(
         sentimentScore,
         magnitudeScore,
@@ -25,22 +35,10 @@ function analyzeSentimentOfText(messageString, channelId, numberOfMessages) {
         numberOfMessages,
       );
     })
-    .then(scoreData => scoreData[0].score)
+    .then(scoreData => console.log(scoreData[0].score))
     .catch(err => err);
 }
 
-function analyzeSentimentAndSaveScore(channelId) {
-  // const channelId = channelId;
-  // const numberOfMessages;
+analyzeSentimentAndSaveScore(1);
 
-  fetchMessageBatch(channelId)
-    .then((messages) => {
-      const messagesArray = messages.map(msgObject => msgObject.message);
-      const messageString = messagesArray.join('\n');
-      const numberOfMessages = messagesArray.length;
-      analyzeSentimentOfText(messageString, channelId, numberOfMessages);
-    })
-    .catch(err => err);
-}
-
-module.exports = { analyzeSentimentAndSaveScore, analyzeSentimentOfText };
+module.exports = { analyzeSentimentAndSaveScore };
