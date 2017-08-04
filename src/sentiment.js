@@ -26,7 +26,7 @@ function analyzeSentimentOfText(messageString, channelId, numberOfMessages) {
         numberOfMessages,
       );
     })
-    .then(scoreData => console.log(scoreData[0].score))
+    .then(scoreData => scoreData[0].score)
     .catch(err => err);
 }
 
@@ -40,7 +40,5 @@ function analyzeSentimentAndSaveScore(channelId) {
     })
     .catch(err => err);
 }
-
-analyzeSentimentAndSaveScore(1);
 
 module.exports = { analyzeSentimentAndSaveScore, analyzeSentimentOfText };
