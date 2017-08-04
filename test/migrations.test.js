@@ -26,8 +26,8 @@ suite('migrations', addDatabaseHooks(() => {
           },
 
           user_id: {
-            type: 'integer',
-            maxLength: null,
+            type: 'string',
+            maxLength: 255,
             nullable: false,
             defaultValue: null,
           },
@@ -67,8 +67,8 @@ suite('migrations', addDatabaseHooks(() => {
           },
 
           channel_id: {
-            type: 'integer',
-            maxLength: null,
+            type: 'string',
+            maxLength: 255,
             nullable: false,
             defaultValue: null,
           },

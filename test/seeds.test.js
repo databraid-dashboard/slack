@@ -20,17 +20,17 @@ suite('seeds', addDatabaseHooks(() => {
         const expected = [
           {
             id: 1,
-            user_id: 324968,
+            user_id: 'a324968f',
             user_name: '@gillyhopkins',
           },
           {
             id: 2,
-            user_id: 986514,
+            user_id: 'b986514g',
             user_name: '@bojangles',
           },
           {
             id: 3,
-            user_id: 548310,
+            user_id: 'c548310h',
             user_name: '@colonelforbin',
           },
         ];
@@ -56,12 +56,12 @@ suite('seeds', addDatabaseHooks(() => {
         const expected = [
           {
             id: 1,
-            channel_id: 847630912,
+            channel_id: 'l847630912p',
             channel_name: '#channel',
           },
           {
             id: 2,
-            channel_id: 63492017,
+            channel_id: 'z63492017x',
             channel_name: '#other_channel',
           },
         ];
