@@ -1,6 +1,10 @@
-require('dotenv').config();
-const express    = require('express');
-const path       = require('path');
+if (process.env.NODE_ENV !== 'production') {
+  /* eslint-disable global-require */
+  require('dotenv').config();
+}
+
+const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
 const socket     = require('socket.io');
 const slack      = require('./routes/slack');
@@ -36,9 +40,12 @@ app.use((err, req, res) => {
   res.render('error');
 });
 
-const server = app.listen(PORT, () => {
-  /* eslint-disable no-console */
-  console.log(`Express server listening on port ${PORT}`);
+
+const server = app.listen(port, () => {
+  if (app.get('env') !== 'test') {
+    /* eslint-disable no-console */
+    console.log('Listening on port', port);
+  }
 });
 
 var io = socket(server);

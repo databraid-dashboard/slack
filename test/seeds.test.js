@@ -1,4 +1,12 @@
-process.env.NODE_ENV = 'development';
+/* eslint-disable no-undef */
+before(() => {
+  process.env.NODE_ENV = 'test';
+});
+
+/* eslint-disable no-undef */
+after(() => {
+  process.env.NODE_ENV = 'docker_dev';
+});
 
 const assert = require('chai').assert;
 const { suite, test } = require('mocha');
@@ -12,18 +20,23 @@ suite('seeds', addDatabaseHooks(() => {
         const expected = [
           {
             id: 1,
-            user_id: 324968,
+            user_id: 'a324968f',
             user_name: '@gillyhopkins',
           },
           {
             id: 2,
-            user_id: 986514,
+            user_id: 'b986514g',
             user_name: '@bojangles',
           },
           {
             id: 3,
-            user_id: 548310,
+            user_id: 'c548310h',
             user_name: '@colonelforbin',
+          },
+          {
+            id: 4,
+            user_id: 'U6FMJ3J3Z',
+            user_name: '@dave.gallup',
           },
         ];
 
@@ -48,13 +61,18 @@ suite('seeds', addDatabaseHooks(() => {
         const expected = [
           {
             id: 1,
-            channel_id: 847630912,
+            channel_id: 'l847630912p',
             channel_name: '#channel',
           },
           {
             id: 2,
-            channel_id: 63492017,
+            channel_id: 'z63492017x',
             channel_name: '#other_channel',
+          },
+          {
+            id: 3,
+            channel_id: 'C6DUVSW3A',
+            channel_name: '#dev',
           },
         ];
 
@@ -129,46 +147,41 @@ suite('seeds', addDatabaseHooks(() => {
             id: 1,
             user_map_id: 1,
             channel_map_id: 1,
-            message_id: 1003,
+            raw_ts: '1501624043.643661',
+            message_timestamp: new Date(1501624043.643661 * 1000),
             message: 'This is a message. This is what I would send over slack in this channel.',
-            created_at: new Date('2017-07-31 14:26:16 UTC'),
-            updated_at: new Date('2017-07-31 14:26:16 UTC'),
           },
           {
             id: 2,
             user_map_id: 3,
             channel_map_id: 1,
-            message_id: 1004,
-            message: 'This is another message. This is different than the last message.',
-            created_at: new Date('2017-07-31 14:26:16 UTC'),
-            updated_at: new Date('2017-07-31 14:26:16 UTC'),
+            raw_ts: '1501625043.643661',
+            message_timestamp: new Date(1501625043.643661 * 1000),
+            message: 'This is a great new message. This is different than the last message.',
           },
           {
             id: 3,
             user_map_id: 1,
             channel_map_id: 1,
-            message_id: 1005,
-            message: 'blahhhh blah blah. Look at this message. It is sooooo cool.',
-            created_at: new Date('2017-07-31 14:26:16 UTC'),
-            updated_at: new Date('2017-07-31 14:26:16 UTC'),
+            raw_ts: '1501626043.643661',
+            message_timestamp: new Date(1501626043.643661 * 1000),
+            message: 'Happy things! Look at this message. It is sooooo cool.',
           },
           {
             id: 4,
             user_map_id: 2,
             channel_map_id: 2,
-            message_id: 1006,
+            raw_ts: '1501627043.643661',
+            message_timestamp: new Date(1501627043.643661 * 1000),
             message: 'I am trying to make a decent amount of messages.',
-            created_at: new Date('2017-07-31 14:26:16 UTC'),
-            updated_at: new Date('2017-07-31 14:26:16 UTC'),
           },
           {
             id: 5,
             user_map_id: 1,
             channel_map_id: 2,
-            message_id: 1003,
+            raw_ts: '1501628043.643661',
+            message_timestamp: new Date(1501628043.643661 * 1000),
             message: 'This is the last message I will add.',
-            created_at: new Date('2017-07-31 14:26:16 UTC'),
-            updated_at: new Date('2017-07-31 14:26:16 UTC'),
           },
         ];
 

@@ -1,4 +1,12 @@
-process.env.NODE_ENV = 'test';
+/* eslint-disable no-undef */
+before(() => {
+  process.env.NODE_ENV = 'test';
+});
+
+/* eslint-disable no-undef */
+after(() => {
+  process.env.NODE_ENV = 'docker_dev';
+});
 
 const assert = require('chai').assert;
 const { suite, test } = require('mocha');
@@ -18,8 +26,8 @@ suite('migrations', addDatabaseHooks(() => {
           },
 
           user_id: {
-            type: 'integer',
-            maxLength: null,
+            type: 'character varying',
+            maxLength: 255,
             nullable: false,
             defaultValue: null,
           },
@@ -59,8 +67,8 @@ suite('migrations', addDatabaseHooks(() => {
           },
 
           channel_id: {
-            type: 'integer',
-            maxLength: null,
+            type: 'character varying',
+            maxLength: 255,
             nullable: false,
             defaultValue: null,
           },
@@ -182,8 +190,15 @@ suite('migrations', addDatabaseHooks(() => {
             defaultValue: null,
           },
 
-          message_id: {
-            type: 'integer',
+          raw_ts: {
+            type: 'character varying',
+            maxLength: 20,
+            nullable: false,
+            defaultValue: null,
+          },
+
+          message_timestamp: {
+            type: 'timestamp with time zone',
             maxLength: null,
             nullable: false,
             defaultValue: null,
@@ -194,20 +209,6 @@ suite('migrations', addDatabaseHooks(() => {
             maxLength: null,
             nullable: false,
             defaultValue: '\'\'::text',
-          },
-
-          created_at: {
-            type: 'timestamp with time zone',
-            maxLength: null,
-            nullable: false,
-            defaultValue: 'now()',
-          },
-
-          updated_at: {
-            type: 'timestamp with time zone',
-            maxLength: null,
-            nullable: false,
-            defaultValue: 'now()',
           },
         };
 
