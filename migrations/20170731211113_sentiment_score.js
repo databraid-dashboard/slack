@@ -1,8 +1,8 @@
 exports.up = knex => knex.schema.createTable('sentiment_score', (table) => {
   table.increments('id').primary();
-  table.integer('channel_map_id')
+  table.string('channel_map_id')
     .notNullable()
-    .references('id')
+    .references('channel_id')
     .inTable('channel_map')
     .onDelete('CASCADE')
     .index();

@@ -4,7 +4,8 @@ const path       = require('path');
 const bodyParser = require('body-parser');
 const socket     = require('socket.io');
 const slack      = require('./routes/slack');
-// const index      = require('./routes/index');
+const index      = require('./routes/index');
+
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -14,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/slack', slack.router);
-// app.use('/', index);
+app.use('/', index);
 
 
 // catch 404 and forward to error handler
@@ -49,5 +50,4 @@ io.on('connection', function(socket){
 
 slack.setEvents(io);
 
-// module.exports = app;
-module.exports = {app, io};
+module.exports = app;
