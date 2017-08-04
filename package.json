@@ -27,10 +27,10 @@
     "knex": "0.13.0",
     "nodemon": "1.11.0",
     "pg": "6.4.0",
-    "request": "2.81.0",
-    "request-promise": "4.2.1"
+    "request": "2.81.0"
   },
   "devDependencies": {
+    "@slack/events-api": "1.0.1",
     "chai": "4.1.0",
     "mocha": "3.4.2",
     "supertest": "3.0.0"

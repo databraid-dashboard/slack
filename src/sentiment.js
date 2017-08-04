@@ -8,7 +8,6 @@ const { fetchMessageBatch, addSentimentScore } = require('../repositories/sentim
 
 const language = Language();
 
-
 function analyzeSentimentOfText(messageString, channelId, numberOfMessages) {
   const document = {
     content: messageString,

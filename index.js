@@ -6,12 +6,18 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const slack = require('./routes/slack');
+const index = require('./routes/index');
 
 const app = express();
+const PORT = process.env.PORT || 8000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/slack', slack);
+app.use('/', index);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -30,8 +36,6 @@ app.use((err, req, res) => {
   res.status(err.status || 500);
   res.render('error');
 });
-
-const port = process.env.PORT || 8000;
 
 app.listen(port, () => {
   if (app.get('env') !== 'test') {
