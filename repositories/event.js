@@ -4,7 +4,7 @@ class Event{
 
   writeMessage(userId, text, date, channelId){
 
-    
+
 
 
   }

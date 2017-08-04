@@ -2,6 +2,7 @@ const express = require('express');
 const request = require('request');
 
 const router = express.Router();
+// const { io } = require('../index');
 
 
 router.get('/auth/redirect', (req, res) => {
@@ -28,11 +29,15 @@ router.get('/auth', (req, res) => {
   res.sendFile(`/app/assets/html/add_to_slack.html`);
 });
 
-router.post('/events', (req, res) => {
-  /* eslint-disable no-console */
-  console.log(req.body.event);
-  res.send('SLACK!');
-});
+function setEvents(io){
+  router.post('/events', (req, res) => {
+    /* eslint-disable no-console */
+    console.log(req.body.event);
+    io.sockets.emit('messages', req.body.event);
+    res.send('SLACK!');
+  });
+}
 
 
-module.exports = router;
+
+module.exports = {router, setEvents};
