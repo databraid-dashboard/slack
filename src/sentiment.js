@@ -1,6 +1,6 @@
 if (process.env.NODE_ENV !== 'production') {
   /* eslint-disable global-require */
-  console.log(require('dotenv').config());
+  require('dotenv').config();
 }
 
 const { camelizeKeys } = require('humps');
@@ -17,7 +17,7 @@ function analyzeSentimentOfText(messageString, channelId, numberOfMessages) {
   };
 
   return language.analyzeSentiment({ document })
-    .then((results) => {
+    .then(results => {
       const sentimentScore = results[0].documentSentiment.score;
       const magnitudeScore = results[0].documentSentiment.magnitude;
       return addSentimentScore(
@@ -27,9 +27,8 @@ function analyzeSentimentOfText(messageString, channelId, numberOfMessages) {
         numberOfMessages,
       );
     })
-    .then((results) => {
-      const newScoreData = camelizeKeys(results[0]);
-      return newScoreData.score;
+    .then(scoreData => {
+      return scoreData[0].score;
     })
     .catch(err => err);
 }
