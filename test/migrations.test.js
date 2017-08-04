@@ -26,7 +26,7 @@ suite('migrations', addDatabaseHooks(() => {
           },
 
           user_id: {
-            type: 'string',
+            type: 'character varying',
             maxLength: 255,
             nullable: false,
             defaultValue: null,
@@ -67,7 +67,7 @@ suite('migrations', addDatabaseHooks(() => {
           },
 
           channel_id: {
-            type: 'string',
+            type: 'character varying',
             maxLength: 255,
             nullable: false,
             defaultValue: null,
@@ -186,6 +186,13 @@ suite('migrations', addDatabaseHooks(() => {
           channel_map_id: {
             type: 'integer',
             maxLength: null,
+            nullable: false,
+            defaultValue: null,
+          },
+
+          raw_ts: {
+            type: 'character varying',
+            maxLength: 20,
             nullable: false,
             defaultValue: null,
           },
