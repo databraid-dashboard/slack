@@ -2,7 +2,7 @@ exports.seed = knex => knex('sentiment_score').del()
   .then(() => knex('sentiment_score').insert([
     {
       id: 1,
-      channel_map_id: 'CCCC1111',
+      channel_map_id: 1,
       score: 0.50,
       magnitude: 30,
       number_of_messages: 100,
@@ -11,7 +11,7 @@ exports.seed = knex => knex('sentiment_score').del()
     },
     {
       id: 2,
-      channel_map_id: 'CCCC1111',
+      channel_map_id: 1,
       score: -0.50,
       magnitude: 32,
       number_of_messages: 100,
@@ -20,7 +20,7 @@ exports.seed = knex => knex('sentiment_score').del()
     },
     {
       id: 3,
-      channel_map_id: 'CCCC2222',
+      channel_map_id: 2,
       score: 0.02,
       magnitude: 15,
       number_of_messages: 100,

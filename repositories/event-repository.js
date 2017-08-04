@@ -2,20 +2,27 @@ const knex  = require('../knex.js');
 
 class EventRepository{
 
+  retrieveUserKey(userId){
+    return knex('user_map').select('id').where('user_id', userId);
+  }
+
+
   writeMessage(userId, text, date, channelId){
 
     if(userId && text && date && channelId){
 
-      return knex('message').insert(
-        {
-          user_map_id      :'111AGJG876',
-          message          :text,
-          message_timestamp:new Date(date * 1000),
-          channel_map_id   :'CCCC1111'
-        }
-        , '*');
+      return knex.raw(`INSERT INTO message
+        (user_map_id, channel_map_id, message_timestamp, message)
+        VALUES (
+          (select id from user_map where user_id = '${userId}'),
+          (select id from channel_map where channel_id = '${channelId}'),
+          CURRENT_TIMESTAMP,
+          '${text}'
+        ) RETURNING *;`);
+
     }
   }
+
 
 
 }

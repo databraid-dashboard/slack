@@ -36,20 +36,23 @@ function setEvents(io){
 
     /* eslint-disable no-console */
 // console.log(req.body.event.user,req.body.event.text,req.body.event.ts,req.body.event.channel);
-    eventRepo.writeMessage(req.body.event.user,req.body.event.text,req.body.event.ts,req.body.event.channel)
-    .then(console.log)
-    // .then(message => {
-    //   var newMessage = {};
-    //   newMessage[userId] = message.user_map_id;
-    //   newMessage[text] = message.message;
-    //   newMessage[date] = message.date;
-    //   newMessage[channelId] = message.channel_map_id;
-    //
-    //   console.log(message);
-    // });
 
-    // console.log(req.body.event);
-    // io.sockets.emit('messages', req.body.event);
+
+    eventRepo.writeMessage(
+      req.body.event.user,
+      req.body.event.text,
+      req.body.event.ts,
+      req.body.event.channel
+    )
+    .then(message => {
+      var newMessage = {};
+      newMessage[userId]    = message.user_map_id;
+      newMessage[text]      = message.message;
+      newMessage[date]      = message.date;
+      newMessage[channelId] = message.channel_map_id;
+
+      io.sockets.emit('messages', newMessage);
+    });
     res.send('SLACK!');
   });
 }

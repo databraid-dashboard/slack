@@ -1,14 +1,14 @@
 exports.up = knex => knex.schema.createTable('message', (table) => {
   table.increments('id').primary();
-  table.string('user_map_id')
+  table.integer('user_map_id')
     .notNullable()
-    .references('user_id')
+    .references('id')
     .inTable('user_map')
     .onDelete('CASCADE')
     .index();
-  table.string('channel_map_id')
+  table.integer('channel_map_id')
     .notNullable()
-    .references('channel_id')
+    .references('id')
     .inTable('channel_map')
     .onDelete('CASCADE')
     .index();
