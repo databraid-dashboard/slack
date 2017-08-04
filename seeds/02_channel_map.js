@@ -10,4 +10,7 @@ exports.seed = knex => knex('channel_map').del()
       channel_id: 'CCCC2222',
       channel_name: '#other_channel',
     },
-  ]));
+  ]))
+  .then(function(){
+        return knex.raw(`SELECT setval('channel_map_id_seq', (SELECT MAX(id) FROM channel_map))`)
+  });
