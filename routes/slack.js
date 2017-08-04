@@ -34,9 +34,6 @@ router.get('/auth', (req, res) => {
 function setEvents(io){
   router.post('/events', (req, res) => {
 
-    /* eslint-disable no-console */
-// console.log(req.body.event.user,req.body.event.text,req.body.event.ts,req.body.event.channel);
-
 
     eventRepo.writeMessage(
       req.body.event.user,
@@ -45,7 +42,7 @@ function setEvents(io){
       req.body.event.channel
     )
     .then(message => {
-      var newMessage = {};
+      var newMessage = {message.raw_ts:{}};
       newMessage[userId]    = message.user_map_id;
       newMessage[text]      = message.message;
       newMessage[date]      = message.date;
