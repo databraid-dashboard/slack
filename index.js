@@ -6,9 +6,8 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const socket     = require('socket.io');
-const slack      = require('./routes/slack');
-const index      = require('./routes/index');
+const socket = require('socket.io');
+const slack = require('./routes/slack');
 
 
 const app = express();
@@ -19,7 +18,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/slack', slack.router);
-app.use('/', index);
 
 
 // catch 404 and forward to error handler
@@ -41,18 +39,18 @@ app.use((err, req, res) => {
 });
 
 
-const server = app.listen(port, () => {
+const server = app.listen(PORT, () => {
   if (app.get('env') !== 'test') {
     /* eslint-disable no-console */
-    console.log('Listening on port', port);
+    console.log('Listening on port', PORT);
   }
 });
 
-var io = socket(server);
+const io = socket(server);
 
-io.on('connection', function(socket){
+io.on('connection', (sock) => {
   /* eslint-disable no-console */
-  console.log(`Made socket connection [${socket.id}]`);
+  console.log(`Made socket connection [${sock.id}]`);
 });
 
 slack.setEvents(io);
