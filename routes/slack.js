@@ -1,8 +1,9 @@
 const express = require('express');
 const request = require('request');
+const { writeMessage } = require('../repositories/event-repository');
+const { analyzeSentimentAndSaveScore } = require('../src/sentiment');
 
 const router = express.Router();
-
 
 router.get('/auth/redirect', (req, res) => {
   const options = {
@@ -19,7 +20,7 @@ router.get('/auth/redirect', (req, res) => {
     if (!JSONresponse.ok) {
       res.send(`Error encountered: \n${JSON.stringify(JSONresponse)}`).status(200).end();
     } else {
-      res.send('Success!');
+      res.send('Authenticating with Slack...');
     }
   });
 });
@@ -28,11 +29,29 @@ router.get('/auth', (req, res) => {
   res.sendFile('/app/assets/html/add_to_slack.html');
 });
 
-router.post('/events', (req, res) => {
-  /* eslint-disable no-console */
-  console.log(req.body.event);
-  res.send('SLACK!');
-});
+function setEvents(io) {
+  router.post('/events', (req, res) => {
+    writeMessage(
+      req.body.event.user,
+      req.body.event.text,
+      req.body.event.ts,
+      req.body.event.channel,
+    )
+      .then((message) => {
+        const newMessage = {};
+        newMessage[message.id] = {};
+        newMessage[message.id].userId = message.user_map_id;
+        newMessage[message.id].text = message.message;
+        newMessage[message.id].date = message.date;
+        newMessage[message.id].channelId = message.channel_map_id;
+
+        io.sockets.emit('messages', newMessage);
+
+        analyzeSentimentAndSaveScore(io, message.channel_map_id);
+      });
+    res.send('SLACK!');
+  });
+}
 
 
-module.exports = router;
+module.exports = { router, setEvents };
