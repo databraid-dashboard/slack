@@ -12,7 +12,7 @@ describe('analyzeSentimentOfText', () => {
   });
 
   it('should return a number', () => {
-    analyzeSentimentOfText('This is a string of text.', 1, 3)
+    analyzeSentimentOfText('')
       .then((result) => {
         expect(result).to.be.a('number');
       });
