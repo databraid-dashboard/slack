@@ -6,6 +6,7 @@ services:
     build: .
     volumes:
       - .:/app
+      - /Users/meghan/.config/gcloud:/credentials/
     command: npm run dev
     ports:
       - 8000:8000
@@ -15,4 +16,4 @@ services:
       - postgres
 
   postgres:
-    image: postgres:9.6.3-alpine
+    image: databraiddb/slack-test-postgres:latest

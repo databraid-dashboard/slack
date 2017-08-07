@@ -1,19 +1,22 @@
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+  /* eslint-disable global-require */
+  require('dotenv').config();
+}
+
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const socket = require('socket.io');
 const slack = require('./routes/slack');
-const index = require('./routes/index');
 
 const app = express();
-const PORT = process.env.PORT || 8000;
+const port = process.env.PORT || 8000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/slack', slack);
-app.use('/', index);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -33,9 +36,22 @@ app.use((err, req, res) => {
   res.render('error');
 });
 
-app.listen(PORT, () => {
-  /* eslint-disable no-console */
-  console.log(`Express server listening on port ${PORT}`);
+const server = app.listen(port, () => {
+  if (app.get('env') !== 'test') {
+    /* eslint-disable no-console */
+    console.log('Listening on port', port);
+  }
 });
+
+
+// scoket setup
+const io = socket(server);
+
+io.on('connection', (sock) => {
+  /* eslint-disable no-console */
+  console.log(`Made socket connection [${sock.id}]`);
+});
+
+slack.setEvents(io);
 
 module.exports = app;
