@@ -25,7 +25,7 @@ router.get('/auth/redirect', (req, res) => {
 });
 
 router.get('/auth', (req, res) => {
-  res.sendFile(`/app/assets/html/add_to_slack.html`);
+  res.sendFile('/app/assets/html/add_to_slack.html');
 });
 
 router.post('/events', (req, res) => {
