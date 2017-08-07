@@ -1,23 +1,6 @@
 /* eslint-disable no-undef, no-unused-expressions */
 const expect = require('chai').expect;
-const { analyzeSentimentOfText, analyzeSentimentAndSaveScore } = require('../src/sentiment.js');
-
-describe('analyzeSentimentOfText', () => {
-  it('should exist', () => {
-    expect(analyzeSentimentOfText).to.exist;
-  });
-
-  it('should be a function', () => {
-    expect(analyzeSentimentOfText).is.a('function');
-  });
-
-  it('should return a number', () => {
-    analyzeSentimentOfText('')
-      .then((result) => {
-        expect(result).to.be.a('number');
-      });
-  });
-});
+const { analyzeSentimentAndSaveScore } = require('../src/sentiment.js');
 
 describe('analyzeSentimentAndSaveScore', () => {
   it('should exist', () => {

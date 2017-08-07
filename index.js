@@ -11,7 +11,7 @@ const slack = require('./routes/slack');
 
 
 const app = express();
-const PORT = process.env.PORT || 8000;
+const port = process.env.PORT || 8000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -39,10 +39,10 @@ app.use((err, req, res) => {
 });
 
 
-const server = app.listen(PORT, () => {
+const server = app.listen(port, () => {
   if (app.get('env') !== 'test') {
     /* eslint-disable no-console */
-    console.log('Listening on port', PORT);
+    console.log('Listening on port', port);
   }
 });
 
