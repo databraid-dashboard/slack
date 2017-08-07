@@ -6,6 +6,7 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const socket = require('socket.io');
 const slack = require('./routes/slack');
 
 const app = express();
@@ -35,11 +36,22 @@ app.use((err, req, res) => {
   res.render('error');
 });
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   if (app.get('env') !== 'test') {
     /* eslint-disable no-console */
     console.log('Listening on port', port);
   }
 });
+
+
+// scoket setup
+const io = socket(server);
+
+io.on('connection', (sock) => {
+  /* eslint-disable no-console */
+  console.log(`Made socket connection [${sock.id}]`);
+});
+
+slack.setEvents(io);
 
 module.exports = app;

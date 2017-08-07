@@ -35,6 +35,6 @@ export default function analyzeSentimentAndSaveScore(io, channelId) {
         numberOfMessages,
       );
     })
-    .then(scoreData => console.log(scoreData[0].score))
+    .then(scoreData => scoreData[0].score)
     .catch(err => err);
 }

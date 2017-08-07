@@ -27,7 +27,8 @@
     "knex": "0.13.0",
     "nodemon": "1.11.0",
     "pg": "6.4.0",
-    "request": "2.81.0"
+    "request": "2.81.0",
+    "socket.io": "2.0.3"
   },
   "devDependencies": {
     "@slack/events-api": "1.0.1",
