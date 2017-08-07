@@ -1,7 +1,7 @@
 const express = require('express');
 const request = require('request');
 const { writeMessage } = require('../repositories/event-repository');
-// const {  } = require('../src/sentiment');
+const { analyzeSentimentAndSaveScore } = require('../src/sentiment');
 
 const router = express.Router();
 
@@ -39,15 +39,15 @@ function setEvents(io) {
     )
       .then((message) => {
         const newMessage = {};
-        newMessage[message.id]           = {};
-        newMessage[message.id].userId    = message.user_map_id;
-        newMessage[message.id].text      = message.message;
-        newMessage[message.id].date      = message.date;
+        newMessage[message.id] = {};
+        newMessage[message.id].userId = message.user_map_id;
+        newMessage[message.id].text = message.message;
+        newMessage[message.id].date = message.date;
         newMessage[message.id].channelId = message.channel_map_id;
 
         io.sockets.emit('messages', newMessage);
 
-
+        analyzeSentimentAndSaveScore(io, message.channel_map_id);
       });
     res.send('SLACK!');
   });

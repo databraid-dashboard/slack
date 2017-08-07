@@ -8,16 +8,26 @@ const { fetchMessageBatch, addSentimentScore } = require('../repositories/sentim
 
 const language = Language();
 
-function analyzeSentimentOfText(messageString, channelId, numberOfMessages) {
-  const document = {
-    content: messageString,
-    type: 'PLAIN_TEXT',
-  };
+module.exports = function analyzeSentimentAndSaveScore(io, channelId) {
+  let numberOfMessages;
 
-  return language.analyzeSentiment({ document })
-    .then((results) => {
-      const sentimentScore = results[0].documentSentiment.score;
-      const magnitudeScore = results[0].documentSentiment.magnitude;
+  fetchMessageBatch(channelId)
+    .then((messages) => {
+      const messagesArray = messages.map(msgObject => msgObject.message);
+      const messageString = messagesArray.join('\n');
+      numberOfMessages = messagesArray.length;
+      return messageString;
+    })
+    .then((messageString) => {
+      const document = {
+        content: messageString,
+        type: 'PLAIN_TEXT',
+      };
+      return language.analyzeSentiment({ document });
+    })
+    .then((analysisResults) => {
+      const sentimentScore = analysisResults[0].documentSentiment.score;
+      const magnitudeScore = analysisResults[0].documentSentiment.magnitude;
       return addSentimentScore(
         sentimentScore,
         magnitudeScore,
@@ -25,19 +35,8 @@ function analyzeSentimentOfText(messageString, channelId, numberOfMessages) {
         numberOfMessages,
       );
     })
-    .then(scoreData => scoreData[0].score)
-    .catch(err => err);
-}
-
-function analyzeSentimentAndSaveScore(channelId) {
-  fetchMessageBatch(channelId)
-    .then((messages) => {
-      const messagesArray = messages.map(msgObject => msgObject.message);
-      const numberOfMessages = messagesArray.length;
-      const messageString = messagesArray.join('\n');
-      analyzeSentimentOfText(messageString, channelId, numberOfMessages);
+    .then((scoreData) => {
+      io.sockets.emit('score', scoreData[0].score);
     })
     .catch(err => err);
-}
-
-module.exports = { analyzeSentimentAndSaveScore, analyzeSentimentOfText };
+};
