@@ -2,7 +2,9 @@
 const expect = require('chai').expect;
 const { writeMessage } = require('../repositories/event-repository');
 
-describe('Event Repo writeMeaage', () => {
+process.env.NODE_ENV = 'test';
+
+describe('Event Repo writeMessage', () => {
   it('should exist', () => {
     expect(writeMessage).to.exist;
   });
