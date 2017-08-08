@@ -45,9 +45,10 @@ function setEvents(io) {
         newMessage[message.id].date = message.date;
         newMessage[message.id].channelId = message.channel_map_id;
 
+
         io.sockets.emit('messages', newMessage);
 
-        analyzeSentimentAndSaveScore(io, message.channel_map_id);
+        analyzeSentimentAndSaveScore(io, message[0].channel_map_id);
       });
     res.send('SLACK!');
   });
