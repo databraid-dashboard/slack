@@ -8,7 +8,7 @@ const { fetchMessageBatch, addSentimentScore } = require('../repositories/sentim
 
 const language = Language();
 
-module.exports = function analyzeSentimentAndSaveScore(io, channelId) {
+function analyzeSentimentAndSaveScore(io, channelId = 1) {
   let numberOfMessages;
 
   fetchMessageBatch(channelId)
@@ -36,7 +36,9 @@ module.exports = function analyzeSentimentAndSaveScore(io, channelId) {
       );
     })
     .then((scoreData) => {
-      io.sockets.emit('score', scoreData[0].score);
+      io.socket.emit('score', scoreData[0].score);
     })
     .catch(err => err);
-};
+}
+
+module.exports = { analyzeSentimentAndSaveScore };

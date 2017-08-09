@@ -1,10 +1,17 @@
 /* eslint-disable no-undef, no-unused-expressions */
+before(() => {
+  process.env.NODE_ENV = 'test';
+});
+
+after(() => {
+  process.env.NODE_ENV = 'docker_dev';
+});
+
 const expect = require('chai').expect;
 const { writeMessage } = require('../repositories/event-repository');
+const { addDatabaseHooks } = require('./utils');
 
-process.env.NODE_ENV = 'test';
-
-describe('Event Repo writeMessage', () => {
+describe('Event Repo writeMessage', addDatabaseHooks(() => {
   it('should exist', () => {
     expect(writeMessage).to.exist;
   });
@@ -13,10 +20,10 @@ describe('Event Repo writeMessage', () => {
     expect(writeMessage).is.a('function');
   });
 
-  it('should return an array', () => {
-    writeMessage('U1111111', 'Message text', '', 'C1111111')
+  it('should return an object', () => {
+    writeMessage('a324968f', 'Message text', '123456789', 'l847630912p')
       .then((result) => {
         expect(result).to.be.a('object');
       });
   });
-});
+}));

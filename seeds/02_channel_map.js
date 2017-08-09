@@ -15,5 +15,10 @@ exports.seed = knex => knex('channel_map').del()
       channel_id: 'C6DUVSW3A',
       channel_name: '#dev',
     },
+    {
+      id: 4,
+      channel_id: 'C6E2XMK4H',
+      channel_name: '#general',
+    },
   ]))
   .then(() => knex.raw('SELECT setval(\'channel_map_id_seq\', (SELECT MAX(id) FROM channel_map))'));

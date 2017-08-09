@@ -20,5 +20,10 @@ exports.seed = knex => knex('user_map').del()
       user_id: 'U6FMJ3J3Z',
       user_name: '@dave.gallup',
     },
+    {
+      id: 5,
+      user_id: 'U6KESJ1BN',
+      user_name: '@meghanprestemon',
+    },
   ]))
   .then(() => knex.raw('SELECT setval(\'user_map_id_seq\', (SELECT MAX(id) FROM user_map))'));
