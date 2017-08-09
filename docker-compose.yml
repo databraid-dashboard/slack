@@ -6,7 +6,6 @@ services:
     build: .
     volumes:
       - .:/app
-      - /Users/meghan/.config/gcloud:/credentials/
     command: npm run dev
     ports:
       - 8000:8000

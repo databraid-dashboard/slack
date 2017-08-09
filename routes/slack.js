@@ -38,19 +38,27 @@ function setEvents(io) {
       req.body.event.channel,
     )
       .then((message) => {
+        const channelId = message[0].channel_map_id;
+        const messageId = message[0].id;
+
         const newMessage = {};
-        newMessage[message.id] = {};
-        newMessage[message.id].userId = message.user_map_id;
-        newMessage[message.id].text = message.message;
-        newMessage[message.id].date = message.date;
-        newMessage[message.id].channelId = message.channel_map_id;
+        newMessage[channelId] = {}; // Slack's channel ID as key
+        newMessage[channelId][messageId] = {}; // Our message ID as key
+
+        newMessage[channelId][messageId].avatarImage = '';
+        newMessage[channelId][messageId].userId = message[0].user_map_id;
+        newMessage[channelId][messageId].name = req.body.event.user;// To be changed after MVP
+        newMessage[channelId][messageId].text = message[0].message;
+        newMessage[channelId][messageId].timestamp = message[0].message_timestamp;
+        newMessage[channelId][messageId].channelId = message[0].channel_map_id;
 
 
         io.sockets.emit('messages', newMessage);
 
+
         analyzeSentimentAndSaveScore(io, message[0].channel_map_id);
       });
-    res.send('SLACK!');
+    res.sendStatus(200);
   });
 }
 
