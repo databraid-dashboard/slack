@@ -36,7 +36,10 @@ function analyzeSentimentAndSaveScore(io, channelId = 1) {
       );
     })
     .then((scoreData) => {
-      io.socket.emit('score', scoreData[0].score);
+      const newScoreData = {};
+      newScoreData[channelId] = scoreData[0].score;
+
+      io.sockets.emit('score', newScoreData);
     })
     .catch(err => err);
 }
