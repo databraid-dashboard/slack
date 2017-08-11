@@ -82,7 +82,7 @@ suite('seeds', addDatabaseHooks(() => {
           {
             id: 4,
             channel_id: 'C6E2XMK4H',
-            channel_name: '#dev_general',
+            channel_name: '#general',
           },
         ];
 

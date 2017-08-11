@@ -23,7 +23,7 @@ describe('Event Repo writeMessage', addDatabaseHooks(() => {
   it('should return an object', () => {
     writeMessage('a324968f', 'Message text', '123456789', 'l847630912p')
       .then((result) => {
-        expect(result).to.be.a('object');
+        expect(result).to.be.a('array');
       });
   });
 }));

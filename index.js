@@ -3,12 +3,12 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
-const express    = require('express');
-const path       = require('path');
+const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
-const socket     = require('socket.io');
-const slack      = require('./routes/slack');
-const channels   = require('./routes/channels');
+const socket = require('socket.io');
+const slack = require('./routes/slack');
+const channels = require('./routes/channels');
 
 
 const app = express();
