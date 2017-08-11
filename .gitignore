@@ -32,6 +32,9 @@ node_modules
 # Debug log from npm
 npm-debug.log
 
+#Codeship
+codeship.aes
+
 # Google Credentials
 google-credentials/service-account.json
 google-credentials/notes.txt
