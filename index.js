@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const socket = require('socket.io');
 const slack = require('./routes/slack');
 const channels = require('./routes/channels');
+const index = require('./routes/index');
 
 
 const app = express();
@@ -20,6 +21,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/slack', slack.router);
 app.use('/channels', channels);
+app.use('/', index); 
 
 
 // catch 404 and forward to error handler
