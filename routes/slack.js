@@ -16,7 +16,7 @@ router.get('/auth/redirect', (req, res) => {
 
   request(options, (error, response, body) => {
     const JSONresponse = JSON.parse(body);
-    console.log(JSONresponse);
+
     if (!JSONresponse.ok) {
       res.send(`Error encountered: \n${JSON.stringify(JSONresponse)}`).status(200).end();
     } else {
@@ -52,7 +52,6 @@ function setEvents(io) {
         newMessage[channelId][messageId].timestamp = message[0].message_timestamp;
         newMessage[channelId][messageId].channelId = message[0].channel_map_id;
 
-        console.log('emitting>>>>', newMessage);
         io.sockets.emit('messages', newMessage);
 
 

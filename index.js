@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/slack', slack.router);
 app.use('/channels', channels);
-app.use('/', index); 
+app.use('/', index);
 
 
 // catch 404 and forward to error handler
