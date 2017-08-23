@@ -1,39 +1,62 @@
+if (process.env.NODE_ENV !== 'production') {
+  /* eslint-disable global-require */
+  require('dotenv').config();
+}
+
 const express = require('express');
-const knex = require('./knex');
+const path = require('path');
 const bodyParser = require('body-parser');
+const socket = require('socket.io');
+const slack = require('./routes/slack');
+const channels = require('./routes/channels');
+const index = require('./routes/index');
+
 
 const app = express();
-const PORT = process.env.PORT || 8000;
+const port = process.env.PORT || 8000;
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', (req, res) => {
-  res.send('aok');
+app.use('/slack', slack.router);
+app.use('/channels', channels);
+app.use('/', index);
+
+
+// catch 404 and forward to error handler
+app.use((req, res, next) => {
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
-app.get('/users', (req, res) => {
-  knex('users').select()
-    .then((users) => {
-      res.json(users);
-    });
+// error handler
+app.use((err, req, res) => {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
 });
 
-app.post('/users', (req, res) => {
-  const name = req.body.name;
-  knex('users').insert({ name }, '*')
-    .then((user) => {
-      res.json(user);
-    })
-    .catch((err) => {
-      res.status(500).send(`There was an error adding the user: ${err}`);
-    });
+
+const server = app.listen(port, () => {
+  if (app.get('env') !== 'test') {
+    /* eslint-disable no-console */
+    console.log('Listening on port', port);
+  }
 });
 
-app.use((req, res) => {
-  res.sendStatus(404);
-});
+const io = socket(server);
 
-app.listen(PORT, () => {
+io.on('connection', (sock) => {
   /* eslint-disable no-console */
-  console.log(`Express server listening on port ${PORT}`);
+  console.log(`Made socket connection [${sock.id}]`);
 });
+
+slack.setEvents(io);
+
+module.exports = app;
