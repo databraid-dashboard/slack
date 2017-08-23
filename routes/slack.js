@@ -10,17 +10,17 @@ router.get('/auth/redirect', (req, res) => {
     uri: `https://slack.com/api/oauth.access?code=${
       req.query.code
     }&client_id=${process.env.SLACK_CLIENT_ID
-    }&client_secret=${process.env.SLACK_CLIENT_SECRET
-    }&redirect_uri=${process.env.REDIRECT_URI}`,
+    }&client_secret=${process.env.SLACK_CLIENT_SECRET}`,
     method: 'GET',
   };
 
   request(options, (error, response, body) => {
     const JSONresponse = JSON.parse(body);
+    console.log(JSONresponse);
     if (!JSONresponse.ok) {
       res.send(`Error encountered: \n${JSON.stringify(JSONresponse)}`).status(200).end();
     } else {
-      res.send('Authenticating with Slack...');
+      res.redirect('/');
     }
   });
 });
@@ -52,7 +52,7 @@ function setEvents(io) {
         newMessage[channelId][messageId].timestamp = message[0].message_timestamp;
         newMessage[channelId][messageId].channelId = message[0].channel_map_id;
 
-
+        console.log('emitting>>>>', newMessage);
         io.sockets.emit('messages', newMessage);
 
 
