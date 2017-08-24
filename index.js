@@ -9,16 +9,21 @@ const bodyParser = require('body-parser');
 const socket = require('socket.io');
 const slack = require('./routes/slack');
 
-
 const app = express();
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 8001;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/slack', slack.router);
+app.use('/slack', slack.router); // Look in /routes/slack.js
 
+/*
+NEEDS (after OAuth):
+- Get all channels
+- Get all users
+
+*/
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -38,7 +43,6 @@ app.use((err, req, res) => {
   res.render('error');
 });
 
-
 const server = app.listen(port, () => {
   if (app.get('env') !== 'test') {
     /* eslint-disable no-console */
@@ -49,10 +53,11 @@ const server = app.listen(port, () => {
 const io = socket(server);
 
 io.on('connection', (sock) => {
+  // event listener for clients to connect [to this, the channel aka server]
   /* eslint-disable no-console */
   console.log(`Made socket connection [${sock.id}]`);
 });
 
-slack.setEvents(io);
+slack.setEvents(io); // function setEvents(io) ...
 
 module.exports = app;
