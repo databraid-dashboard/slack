@@ -1,0 +1,12 @@
+- service: slack-api
+  command: npm run production-lint
+- service: slack-api
+  command: npm run production-test
+- service: slack-api
+  type: push
+  image_name: databraiddb/slack-api
+  encrypted_dockercfg_path: dockercfg.encrypted
+- service: awsdeployment
+  command: aws ecs register-task-definition --cli-input-json file:///deploy/tasks/slack-api.json
+- service: awsdeployment
+  command: aws ecs update-service --cluster databraid-cluster --service slack-api-service --task-definition slack-api

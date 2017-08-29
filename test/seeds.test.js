@@ -81,29 +81,62 @@ suite(
           const expected = [
             {
               id: 1,
-              channel_id: 'l847630912p',
-              channel_name: '#channel',
-            },
-            {
-              id: 2,
-              channel_id: 'z63492017x',
-              channel_name: '#other_channel',
-            },
-            {
-              id: 3,
               channel_id: 'C6DUVSW3A',
               channel_name: '#dev',
             },
             {
-              id: 4,
+              id: 2,
               channel_id: 'C6E2XMK4H',
-              channel_name: '#dev_general',
+              channel_name: '#general',
+            },
+            {
+              id: 3,
+              channel_id: 'l847630912p',
+              channel_name: '#random',
+            },
+            {
+              id: 4,
+              channel_id: 'z63492017x',
+              channel_name: '#other_channel',
             },
           ];
 
           expected.forEach((row, i) => {
             assert.deepEqual(actual[i], expected[i], `Row id=${i + 1} not the same`);
           });
+
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+    test('channel_map rows', (done) => {
+      knex('channel_map')
+        .orderBy('id', 'ASC')
+        .then((actual) => {
+          const expected = [
+            {
+              id: 1,
+              channel_id: 'C6DUVSW3A',
+              channel_name: '#dev',
+            },
+            {
+              id: 2,
+              channel_id: 'C6E2XMK4H',
+              channel_name: '#general',
+            },
+            {
+              id: 3,
+              channel_id: 'l847630912p',
+              channel_name: '#random',
+            },
+            {
+              id: 4,
+              channel_id: 'z63492017x',
+              channel_name: '#other_channel',
+            },
+          ];
 
           done();
         })

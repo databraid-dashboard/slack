@@ -11,13 +11,18 @@
     "rollback": "scripts/rollback",
     "latest": "scripts/latest",
     "seed": "scripts/seed",
-    "lint": "scripts/lint"
+    "lint": "scripts/lint",
+    "production-test": "scripts/production-test",
+    "production-lint": "scripts/production-lint",
+    "start": "./node_modules/@databraid/env.util/index.js --bucket databraid --key slack-api && node index.js"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@databraid/env-util": "1.0.2",
     "@google-cloud/language": "0.11.0",
     "body-parser": "1.17.2",
+    "cors": "2.8.4",
     "dotenv": "4.0.0",
     "eslint": "4.3.0",
     "eslint-config-airbnb-base": "11.3.1",

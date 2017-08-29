@@ -26,16 +26,16 @@ router.get('/auth/redirect', (req, res) => {
 });
 
 router.get('/auth', (req, res) => {
-  const buttonHTML = `<a href="https://slack.com/oauth/authorize?scope=incoming-webhook&client_id=${process
+  const buttonHTML = `<a href="https://slack.com/oauth/authorize?scope=channels:history,reactions:read,users:read,users.profile:read&client_id=${process
     .env.SLACK_CLIENT_ID}&redirect_uri=${process.env
     .REDIRECT_URI}"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>`;
   return res.send(buttonHTML);
-  // res.sendFile('/app/assets/html/add_to_slack.html'); // Produces the HTML button that allows user to sign in with OAuth
 });
 
 function setEvents(io) {
   // This gets hit after a message is sent inside the literal slack app, and picked up by the slack 'app' (https://api.slack.com/apps/Databraid_Slack_App)
   router.post('/events', (req, res) => {
+    console.log(req);
     writeMessage(
       req.body.event.user,
       req.body.event.text,
@@ -58,7 +58,7 @@ function setEvents(io) {
 
       console.log('>>>>>>>>>>>>> ', newMessage);
 
-      io.sockets.emit('messages', newMessage); // Sending message to the frontend client
+      io.sockets.emit('messages', newMessage);
 
       // analyzeSentimentAndSaveScore(io, message[0].channel_map_id); // Passing message off for Sentiment Analysis
     });

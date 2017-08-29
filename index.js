@@ -7,23 +7,30 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const socket = require('socket.io');
-const slack = require('./routes/slack');
+const cors = require('cors');
 
 const app = express();
 const port = process.env.PORT || 8001;
+
+const slack = require('./routes/slack');
+const channels = require('./routes/channels');
+const message = require('./routes/message');
+// const users = require('./routes/users');
+
+app.use('/slack', slack.router);
+app.use(channels);
+app.use(message);
+// app.use(users);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/slack', slack.router); // Look in /routes/slack.js
+app.use(cors());
 
-/*
-NEEDS (after OAuth):
-- Get all channels
-- Get all users
-
-*/
+app.get('/', (req, res) => {
+  res.sendStatus(200);
+});
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
