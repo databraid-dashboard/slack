@@ -16,7 +16,6 @@ router.get('/auth/redirect', (req, res) => {
 
   request(options, (error, response, body) => {
     const JSONresponse = JSON.parse(body);
-    console.log(JSONresponse);
     if (!JSONresponse.ok) {
       res.send(`Error encountered: \n${JSON.stringify(JSONresponse)}`).status(200).end();
     } else {
@@ -35,7 +34,6 @@ router.get('/auth', (req, res) => {
 function setEvents(io) {
   // This gets hit after a message is sent inside the literal slack app, and picked up by the slack 'app' (https://api.slack.com/apps/Databraid_Slack_App)
   router.post('/events', (req, res) => {
-    console.log(req);
     writeMessage(
       req.body.event.user,
       req.body.event.text,
@@ -56,11 +54,10 @@ function setEvents(io) {
       newMessage[channelId][messageId].timestamp = message[0].message_timestamp;
       newMessage[channelId][messageId].channelId = message[0].channel_map_id;
 
-      console.log('>>>>>>>>>>>>> ', newMessage);
-
       io.sockets.emit('messages', newMessage);
 
-      // analyzeSentimentAndSaveScore(io, message[0].channel_map_id); // Passing message off for Sentiment Analysis
+      // Passing message off for Sentiment Analysis
+      analyzeSentimentAndSaveScore(io, message[0].channel_map_id);
     });
     res.sendStatus(200);
   });

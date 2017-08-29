@@ -14,13 +14,11 @@ const port = process.env.PORT || 8001;
 
 const slack = require('./routes/slack');
 const channels = require('./routes/channels');
-const message = require('./routes/message');
-// const users = require('./routes/users');
+const messages = require('./routes/messages');
 
 app.use('/slack', slack.router);
 app.use(channels);
-app.use(message);
-// app.use(users);
+app.use(messages);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

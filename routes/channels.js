@@ -18,13 +18,13 @@ router.get('/channels', (req, res, next) => {
 });
 
 router.get('/channels/:id', (req, res, next) => {
-  const id = Number.parseInt(req.params.id);
+  const id = Number.parseInt(req.params.id, 10);
 
   if (Number.isNaN(id)) {
     return next();
   }
 
-  getChannelById(id)
+  return getChannelById(id)
     .then((channel) => {
       res.status(200).send(channel);
     })

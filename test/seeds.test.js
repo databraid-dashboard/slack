@@ -138,6 +138,10 @@ suite(
             },
           ];
 
+          expected.forEach((row, i) => {
+            assert.deepEqual(actual[i], expected[i], `Row id=${i + 1} not the same`);
+          });
+
           done();
         })
         .catch((err) => {

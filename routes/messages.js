@@ -18,7 +18,7 @@ router.get('/messages', (req, res, next) => {
 });
 
 router.get('/messages/:channelName', (req, res, next) => {
-  getMessagesByChannelName(channelName)
+  getMessagesByChannelName(req.params.channelName)
     .then((messages) => {
       res.status(200).send(messages);
     })

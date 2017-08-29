@@ -1,35 +1,24 @@
 const knex = require('../knex.js');
-const { camelizeKeys, decamelizeKeys } = require('humps');
+const { camelizeKeys } = require('humps');
 
 function getChannels() {
-  return knex('channel_map')
-    .orderBy('channel_name')
-    .then((rows) => {
-      const channels = camelizeKeys(rows);
+  return knex('channel_map').orderBy('channel_name').then((rows) => {
+    const channels = camelizeKeys(rows);
 
-      return channels;
-    })
-    .catch((err) => {
-      next(err);
-    });
+    return channels;
+  });
 }
 
 function getChannelById(id) {
-  return knex('channel_map')
-    .where('id', id)
-    .first()
-    .then((row) => {
-      if (!row) {
-        console.error(404, 'Not Found');
-      }
+  return knex('channel_map').where('id', id).first().then((row) => {
+    if (!row) {
+      throw new Error(404, 'Not Found');
+    }
 
-      const channel = camelizeKeys(row);
+    const channel = camelizeKeys(row);
 
-      return channel;
-    })
-    .catch((err) => {
-      next(err);
-    });
+    return channel;
+  });
 }
 
 module.exports = { getChannels, getChannelById };
