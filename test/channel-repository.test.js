@@ -8,20 +8,20 @@ after(() => {
 });
 
 const expect = require('chai').expect;
-const { writeMessage } = require('../repositories/event-repository');
+const { getChannels } = require('../repositories/channel-repository');
 const { addDatabaseHooks } = require('./utils');
 
-describe('Event Repo writeMessage', addDatabaseHooks(() => {
+describe('Channel Repo getChannels', addDatabaseHooks(() => {
   it('should exist', () => {
-    expect(writeMessage).to.exist;
+    expect(getChannels).to.exist;
   });
 
   it('should be a function', () => {
-    expect(writeMessage).is.a('function');
+    expect(getChannels).is.a('function');
   });
 
   it('should return an array', () => {
-    writeMessage('a324968f', 'Message text', '123456789', 'l847630912p')
+    getChannels()
       .then((result) => {
         expect(result).to.be.a('array');
       });

@@ -11,7 +11,6 @@ const slack = require('./routes/slack');
 const channels = require('./routes/channels');
 const index = require('./routes/index');
 
-
 const app = express();
 const port = process.env.PORT || 8000;
 
@@ -41,7 +40,6 @@ app.use((err, req, res) => {
   res.status(err.status || 500);
   res.render('error');
 });
-
 
 const server = app.listen(port, () => {
   if (app.get('env') !== 'test') {
