@@ -78,6 +78,7 @@ function setEvents(io) {
         break;
 
       default:
+        // for now, ignore any messages not handled by the case conditions 
     }
     res.sendStatus(200);
   });

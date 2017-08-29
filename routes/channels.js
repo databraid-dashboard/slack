@@ -3,7 +3,7 @@ const { getChannels } = require('../repositories/channel-repository');
 
 const router = express.Router();
 
-router.get('/channels', (req, res) => (
+router.get('/', (req, res) => (
   getChannels()
     .then((channels) => {
       res.send(channels);

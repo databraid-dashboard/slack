@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/slack', slack.router);
-app.use(channels);
+app.use('/channels', channels);
 app.use('/', index);
 
 
