@@ -1,15 +1,15 @@
-exports.up = knex => knex.schema.createTable('message', (table) => {
-  table.increments('id').primary();
+exports.up = knex => knex.schema.createTable('messages', (table) => {
+  table.increments('message_id').primary();
   table.integer('user_id')
     .notNullable()
-    .references('id')
-    .inTable('user_map')
+    .references('user_id')
+    .inTable('users')
     .onDelete('CASCADE')
     .index();
   table.integer('channel_id')
     .notNullable()
-    .references('id')
-    .inTable('channel_map')
+    .references('channel_id')
+    .inTable('channels')
     .onDelete('CASCADE')
     .index();
   table.string('raw_ts', 20).notNullable();
@@ -17,4 +17,4 @@ exports.up = knex => knex.schema.createTable('message', (table) => {
   table.text('message').notNullable().defaultTo('');
 });
 
-exports.down = knex => knex.schema.dropTable('message');
+exports.down = knex => knex.schema.dropTable('messages');

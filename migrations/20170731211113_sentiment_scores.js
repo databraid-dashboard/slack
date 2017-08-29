@@ -1,9 +1,9 @@
-exports.up = knex => knex.schema.createTable('sentiment_score', (table) => {
-  table.increments('id').primary();
+exports.up = knex => knex.schema.createTable('sentiment_scores', (table) => {
+  table.increments('sentiment_score_id').primary();
   table.integer('channel_id')
     .notNullable()
-    .references('id')
-    .inTable('channel_map')
+    .references('channel_id')
+    .inTable('channels')
     .onDelete('CASCADE')
     .index();
   table.decimal('score', 3, 2).notNullable();
@@ -12,4 +12,4 @@ exports.up = knex => knex.schema.createTable('sentiment_score', (table) => {
   table.timestamps(true, true);
 });
 
-exports.down = knex => knex.schema.dropTable('sentiment_score');
+exports.down = knex => knex.schema.dropTable('sentiment_scores');
