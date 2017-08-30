@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.use(cors());
 
-router.get('/channels', (req, res, next) => {
+router.get('/', (req, res, next) => {
   getChannels()
     .then((channels) => {
       res.status(200).send(channels);
@@ -17,7 +17,7 @@ router.get('/channels', (req, res, next) => {
     });
 });
 
-router.get('/channels/:id', (req, res, next) => {
+router.get('/:id', (req, res, next) => {
   const id = Number.parseInt(req.params.id, 10);
 
   if (Number.isNaN(id)) {

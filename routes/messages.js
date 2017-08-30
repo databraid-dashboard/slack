@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.use(cors());
 
-router.get('/messages', (req, res, next) => {
+router.get('/', (req, res, next) => {
   getMessages()
     .then((messages) => {
       res.status(200).send(messages);
@@ -17,7 +17,7 @@ router.get('/messages', (req, res, next) => {
     });
 });
 
-router.get('/messages/:channelName', (req, res, next) => {
+router.get('/:channelName', (req, res, next) => {
   getMessagesByChannelName(req.params.channelName)
     .then((messages) => {
       res.status(200).send(messages);
