@@ -13,23 +13,23 @@ function handleNewMessageEvent(io, req) {
     req.body.event.channel,
   )
     .then((message) => {
-      const channelId = message[0].channel_map_id;
-      const messageId = message[0].id;
+      const channelId = message[0].channel_id;
+      const messageId = message[0].message_id;
 
       const newMessage = {};
       newMessage[channelId] = {}; // Slack's channel ID as key
       newMessage[channelId][messageId] = {}; // Our message ID as key
 
       newMessage[channelId][messageId].avatarImage = '';
-      newMessage[channelId][messageId].userId = message[0].user_map_id;
+      newMessage[channelId][messageId].userId = message[0].user_id;
       newMessage[channelId][messageId].name = req.body.event.user;// To be changed after MVP
       newMessage[channelId][messageId].text = message[0].message;
       newMessage[channelId][messageId].timestamp = message[0].message_timestamp;
-      newMessage[channelId][messageId].channelId = message[0].channel_map_id;
+      newMessage[channelId][messageId].channelId = message[0].channel_id;
 
       io.sockets.emit('messages', newMessage);
 
-      analyzeSentimentAndSaveScore(io, message[0].channel_map_id);
+      analyzeSentimentAndSaveScore(io, message[0].channel_id);
     });
 }
 
@@ -78,7 +78,7 @@ function setEvents(io) {
         break;
 
       default:
-        // for now, ignore any messages not handled by the case conditions 
+        // for now, ignore any messages not handled by the case conditions
     }
     res.sendStatus(200);
   });
