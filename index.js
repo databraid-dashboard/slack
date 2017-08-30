@@ -7,21 +7,30 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const socket = require('socket.io');
-const slack = require('./routes/slack');
-const channels = require('./routes/channels');
-const index = require('./routes/index');
+const cors = require('cors');
 
 const app = express();
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 8001;
+
+const slack = require('./routes/slack');
+const channels = require('./routes/channels');
+const messages = require('./routes/messages');
+// const index = require('./routes/index');
+
+app.use('/slack', slack.router);
+app.use('/channels', channels);
+app.use('/messages', messages);
+// app.use('/', index);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/slack', slack.router);
-app.use('/channels', channels);
-app.use('/', index);
+app.use(cors());
 
+app.get('/', (req, res) => {
+  res.sendStatus(200);
+});
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -51,10 +60,11 @@ const server = app.listen(port, () => {
 const io = socket(server);
 
 io.on('connection', (sock) => {
+  // event listener for clients to connect [to this, the channel aka server]
   /* eslint-disable no-console */
   console.log(`Made socket connection [${sock.id}]`);
 });
 
-slack.setEvents(io);
+slack.setEvents(io); // function setEvents(io) ...
 
 module.exports = app;

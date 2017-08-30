@@ -12,40 +12,38 @@ function handleNewMessageEvent(io, req) {
     req.body.event.text,
     req.body.event.ts,
     req.body.event.channel,
-  )
-    .then((message) => {
-      const channelId = message[0].channel_map_id;
-      const messageId = message[0].id;
+  ).then((message) => {
+    const channelId = message[0].channel_map_id;
+    const messageId = message[0].id;
 
-      const newMessage = {};
-      newMessage[channelId] = {}; // Slack's channel ID as key
-      newMessage[channelId][messageId] = {}; // Our message ID as key
+    const newMessage = {};
+    newMessage[channelId] = {}; // Slack's channel ID as key
+    newMessage[channelId][messageId] = {}; // Our message ID as key
 
-      newMessage[channelId][messageId].avatarImage = '';
-      newMessage[channelId][messageId].userId = message[0].user_map_id;
-      newMessage[channelId][messageId].name = req.body.event.user;// To be changed after MVP
-      newMessage[channelId][messageId].text = message[0].message;
-      newMessage[channelId][messageId].timestamp = message[0].message_timestamp;
-      newMessage[channelId][messageId].channelId = message[0].channel_map_id;
+    newMessage[channelId][messageId].avatarImage = '';
+    newMessage[channelId][messageId].userId = message[0].user_map_id;
+    newMessage[channelId][messageId].name = req.body.event.user; // To be changed after MVP
+    newMessage[channelId][messageId].text = message[0].message;
+    newMessage[channelId][messageId].timestamp = message[0].message_timestamp;
+    newMessage[channelId][messageId].channelId = message[0].channel_map_id;
 
-      io.sockets.emit('messages', newMessage);
+    io.sockets.emit('messages', newMessage);
 
-      analyzeSentimentAndSaveScore(io, message[0].channel_map_id);
-    });
+    analyzeSentimentAndSaveScore(io, message[0].channel_map_id);
+  });
 }
 
 router.get('/auth/redirect', (req, res) => {
+  // This gets hit after click event to log in, and the slack 'app' sends back a code
   const options = {
-    uri: `https://slack.com/api/oauth.access?code=${
-      req.query.code
-    }&client_id=${process.env.SLACK_CLIENT_ID
-    }&client_secret=${process.env.SLACK_CLIENT_SECRET}`,
+    uri: `https://slack.com/api/oauth.access?code=${req.query.code}&client_id=${process.env
+      .SLACK_CLIENT_ID}&client_secret=${process.env.SLACK_CLIENT_SECRET}&redirect_uri=${process.env
+      .REDIRECT_URI}`,
     method: 'GET',
   };
 
   request(options, (error, response, body) => {
     const JSONresponse = JSON.parse(body);
-
     if (!JSONresponse.ok) {
       res.send(`Error encountered: \n${JSON.stringify(JSONresponse)}`).status(200).end();
     } else {
@@ -63,6 +61,7 @@ router.get('/auth', (req, res) => {
 });
 
 function setEvents(io) {
+  // This gets hit after a message is sent inside the literal slack app, and picked up by the slack 'app' (https://api.slack.com/apps/Databraid_Slack_App)
   router.post('/events', (req, res) => {
     switch (req.body.event.type) {
       case 'message':
@@ -71,8 +70,7 @@ function setEvents(io) {
           break;
         }
         // message deleted
-        if (req.body.event.subtype
-          && req.body.event.subtype === 'message_deleted') {
+        if (req.body.event.subtype && req.body.event.subtype === 'message_deleted') {
           break;
         }
         // message posted
@@ -80,7 +78,7 @@ function setEvents(io) {
         break;
 
       default:
-        // for now, ignore any messages not handled by the case conditions
+      // for now, ignore any messages not handled by the case conditions
     }
     res.sendStatus(200);
   });

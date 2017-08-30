@@ -8,22 +8,22 @@ after(() => {
 });
 
 const expect = require('chai').expect;
-const { getChannels, getChannelById } = require('../repositories/channel-repository');
+const { getMessages, getMessagesByChannelName } = require('../repositories/message-repository');
 const { addDatabaseHooks } = require('./utils');
 
 describe(
-  'Event Repo getChannels',
+  'Event Repo getMessages',
   addDatabaseHooks(() => {
     it('should exist', () => {
-      expect(getChannels).to.exist;
+      expect(getMessages).to.exist;
     });
 
     it('should be a function', () => {
-      expect(getChannels).is.a('function');
+      expect(getMessages).is.a('function');
     });
 
     it('should return an array of objects', () => {
-      getChannels().then((result) => {
+      getMessages().then((result) => {
         expect(result).to.be.a('array');
       });
     });
@@ -31,19 +31,19 @@ describe(
 );
 
 describe(
-  'Event Repo getChannelById',
+  'Event Repo getMessagesByChannelName',
   addDatabaseHooks(() => {
     it('should exist', () => {
-      expect(getChannelById).to.exist;
+      expect(getMessagesByChannelName).to.exist;
     });
 
     it('should be a function', () => {
-      expect(getChannelById).is.a('function');
+      expect(getMessagesByChannelName).is.a('function');
     });
 
-    it('should return an object', () => {
-      getChannelById(1).then((result) => {
-        expect(result).to.be.a('object');
+    it('should return an array', () => {
+      getMessagesByChannelName('dev').then((result) => {
+        expect(result).to.be.a('array');
       });
     });
   }),
