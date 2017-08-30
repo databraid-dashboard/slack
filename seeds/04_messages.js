@@ -41,4 +41,4 @@ exports.seed = knex => knex('messages').del()
       message: 'This is the last message I will add.',
     },
   ]))
-  .then(() => knex.raw('SELECT setval(\'messages_id_seq\', (SELECT MAX(message_id) FROM messages))'));
+  .then(() => knex.raw('SELECT setval(\'messages_message_id_seq\', (SELECT MAX(message_id) FROM messages))'));

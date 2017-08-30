@@ -1,12 +1,12 @@
 exports.up = knex => knex.schema.createTable('messages', (table) => {
   table.increments('message_id').primary();
-  table.integer('user_id')
+  table.string('user_id')
     .notNullable()
     .references('user_id')
     .inTable('users')
     .onDelete('CASCADE')
     .index();
-  table.integer('channel_id')
+  table.string('channel_id')
     .notNullable()
     .references('channel_id')
     .inTable('channels')
