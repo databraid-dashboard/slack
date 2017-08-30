@@ -1,8 +1,8 @@
 exports.seed = knex => knex('channels').del()
   .then(() => knex('channels').insert([
     {
-      channel_id: 'l847630912p',
-      channel_name: 'channel',
+      channel_id: 'C6E2XMLAV',
+      channel_name: 'random',
     },
     {
       channel_id: 'C6DUVSW3A',
