@@ -2,11 +2,7 @@ const knex = require('../knex.js');
 const { camelizeKeys } = require('humps');
 
 function getMessages() {
-  return knex('message').orderBy('channel_map_id').then((rows) => {
-    const messages = camelizeKeys(rows);
-
-    return messages;
-  });
+  return knex('message').orderBy('channel_map_id').then(result => camelizeKeys(result));
 }
 
 function getMessagesByChannelName(channelName) {
@@ -17,15 +13,9 @@ function getMessagesByChannelName(channelName) {
 
   const subquery = knex('channel_map').select('id').where('channel_name', channelName);
 
-  return knex('message').where('channel_map_id', 'in', subquery).then((row) => {
-    if (!row) {
-      throw new Error(404, 'Not Found');
-    }
-
-    const messages = camelizeKeys(row);
-
-    return messages;
-  });
+  return knex('message')
+    .where('channel_map_id', 'in', subquery)
+    .then(result => camelizeKeys(result));
 }
 
 module.exports = { getMessages, getMessagesByChannelName };
