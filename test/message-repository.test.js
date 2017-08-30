@@ -42,7 +42,7 @@ describe(
     });
 
     it('should return an array', () => {
-      getMessagesByChannelName('#dev').then((result) => {
+      getMessagesByChannelName('dev').then((result) => {
         expect(result).to.be.a('array');
       });
     });

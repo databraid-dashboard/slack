@@ -54,6 +54,8 @@ function setEvents(io) {
       newMessage[channelId][messageId].timestamp = message[0].message_timestamp;
       newMessage[channelId][messageId].channelId = message[0].channel_map_id;
 
+      console.log(newMessage, '>>>>>>>>>>>>>>.');
+
       io.sockets.emit('messages', newMessage);
 
       // Passing message off for Sentiment Analysis

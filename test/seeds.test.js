@@ -82,22 +82,22 @@ suite(
             {
               id: 1,
               channel_id: 'C6DUVSW3A',
-              channel_name: '#dev',
+              channel_name: 'dev',
             },
             {
               id: 2,
               channel_id: 'C6E2XMK4H',
-              channel_name: '#general',
+              channel_name: 'general',
             },
             {
               id: 3,
               channel_id: 'l847630912p',
-              channel_name: '#random',
+              channel_name: 'random',
             },
             {
               id: 4,
               channel_id: 'z63492017x',
-              channel_name: '#other_channel',
+              channel_name: 'other_channel',
             },
           ];
 
@@ -119,22 +119,22 @@ suite(
             {
               id: 1,
               channel_id: 'C6DUVSW3A',
-              channel_name: '#dev',
+              channel_name: 'dev',
             },
             {
               id: 2,
               channel_id: 'C6E2XMK4H',
-              channel_name: '#general',
+              channel_name: 'general',
             },
             {
               id: 3,
               channel_id: 'l847630912p',
-              channel_name: '#random',
+              channel_name: 'random',
             },
             {
               id: 4,
               channel_id: 'z63492017x',
-              channel_name: '#other_channel',
+              channel_name: 'other_channel',
             },
           ];
 
