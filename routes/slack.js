@@ -1,6 +1,7 @@
 const express = require('express');
 const request = require('request');
 const { writeMessage } = require('../repositories/event-repository');
+const { updateOption } = require('../repositories/option-repository');
 const { analyzeSentimentAndSaveScore } = require('../src/sentiment');
 
 const router = express.Router();
@@ -48,6 +49,7 @@ router.get('/auth/redirect', (req, res) => {
     if (!JSONresponse.ok) {
       res.send(`Error encountered: \n${JSON.stringify(JSONresponse)}`).status(200).end();
     } else {
+      updateOption('oauth_token', JSONresponse.access_token);
       res.redirect('/');
     }
   });
@@ -78,7 +80,7 @@ function setEvents(io) {
         break;
 
       default:
-        // for now, ignore any messages not handled by the case conditions 
+        // for now, ignore any messages not handled by the case conditions
     }
     res.sendStatus(200);
   });
