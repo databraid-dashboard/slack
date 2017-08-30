@@ -2,8 +2,12 @@ const express = require('express');
 const request = require('request');
 const { writeMessage } = require('../repositories/event-repository');
 const { analyzeSentimentAndSaveScore } = require('../src/sentiment');
+const cors = require('cors');
 
+// eslint-disable-next-line new-cap
 const router = express.Router();
+
+router.use(cors());
 
 function handleNewMessageEvent(io, req) {
   return writeMessage(
@@ -11,34 +15,33 @@ function handleNewMessageEvent(io, req) {
     req.body.event.text,
     req.body.event.ts,
     req.body.event.channel,
-  )
-    .then((message) => {
-      const channelId = message[0].channel_map_id;
-      const messageId = message[0].id;
+  ).then((message) => {
+    const channelId = message[0].channel_map_id;
+    const messageId = message[0].id;
 
-      const newMessage = {};
-      newMessage[channelId] = {}; // Slack's channel ID as key
-      newMessage[channelId][messageId] = {}; // Our message ID as key
+    const newMessage = {};
+    newMessage[channelId] = {}; // Slack's channel ID as key
+    newMessage[channelId][messageId] = {}; // Our message ID as key
 
-      newMessage[channelId][messageId].avatarImage = '';
-      newMessage[channelId][messageId].userId = message[0].user_map_id;
-      newMessage[channelId][messageId].name = req.body.event.user;// To be changed after MVP
-      newMessage[channelId][messageId].text = message[0].message;
-      newMessage[channelId][messageId].timestamp = message[0].message_timestamp;
-      newMessage[channelId][messageId].channelId = message[0].channel_map_id;
+    newMessage[channelId][messageId].avatarImage = '';
+    newMessage[channelId][messageId].userId = message[0].user_map_id;
+    newMessage[channelId][messageId].name = req.body.event.user; // To be changed after MVP
+    newMessage[channelId][messageId].text = message[0].message;
+    newMessage[channelId][messageId].timestamp = message[0].message_timestamp;
+    newMessage[channelId][messageId].channelId = message[0].channel_map_id;
 
-      io.sockets.emit('messages', newMessage);
+    console.log(newMessage, '>>>>>>>>>>>>>>>>>>>>>>');
 
-      analyzeSentimentAndSaveScore(io, message[0].channel_map_id);
-    });
+    io.sockets.emit('messages', newMessage);
+
+    // analyzeSentimentAndSaveScore(io, message[0].channel_map_id);
+  });
 }
 
 router.get('/auth/redirect', (req, res) => {
   const options = {
-    uri: `https://slack.com/api/oauth.access?code=${
-      req.query.code
-    }&client_id=${process.env.SLACK_CLIENT_ID
-    }&client_secret=${process.env.SLACK_CLIENT_SECRET}`,
+    uri: `https://slack.com/api/oauth.access?code=${req.query.code}&client_id=${process.env
+      .SLACK_CLIENT_ID}&client_secret=${process.env.SLACK_CLIENT_SECRET}`,
     method: 'GET',
   };
 
@@ -69,8 +72,7 @@ function setEvents(io) {
           break;
         }
         // message deleted
-        if (req.body.event.subtype
-          && req.body.event.subtype === 'message_deleted') {
+        if (req.body.event.subtype && req.body.event.subtype === 'message_deleted') {
           break;
         }
         // message posted
@@ -78,7 +80,7 @@ function setEvents(io) {
         break;
 
       default:
-        // for now, ignore any messages not handled by the case conditions 
+      // for now, ignore any messages not handled by the case conditions
     }
     res.sendStatus(200);
   });

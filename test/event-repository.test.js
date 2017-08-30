@@ -11,19 +11,26 @@ const expect = require('chai').expect;
 const { writeMessage } = require('../repositories/event-repository');
 const { addDatabaseHooks } = require('./utils');
 
-describe('Event Repo writeMessage', addDatabaseHooks(() => {
-  it('should exist', () => {
-    expect(writeMessage).to.exist;
-  });
+describe(
+  'Event Repo writeMessage',
+  addDatabaseHooks(() => {
+    it('should exist', () => {
+      expect(writeMessage).to.exist;
+    });
 
-  it('should be a function', () => {
-    expect(writeMessage).is.a('function');
-  });
+    it('should be a function', () => {
+      expect(writeMessage).is.a('function');
+    });
 
-  it('should return an array', () => {
-    writeMessage('a324968f', 'Message text', '123456789', 'l847630912p')
-      .then((result) => {
+    it('should return an array', () => {
+      writeMessage(
+        'U6KESJ1BN',
+        'This is a great new message. This is different than the last message.',
+        '1501625043.643661',
+        'l847630912p',
+      ).then((result) => {
         expect(result).to.be.a('array');
       });
-  });
-}));
+    });
+  }),
+);
