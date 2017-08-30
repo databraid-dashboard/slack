@@ -1,11 +1,8 @@
 const express = require('express');
 const { getMessages, getMessagesByChannelName } = require('../repositories/message-repository');
-const cors = require('cors');
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
-
-router.use(cors());
 
 router.get('/', (req, res, next) => {
   getMessages()
