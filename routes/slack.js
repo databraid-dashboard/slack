@@ -12,25 +12,46 @@ function handleNewMessageEvent(io, req) {
     req.body.event.text,
     req.body.event.ts,
     req.body.event.channel,
+<<<<<<< HEAD
   ).then((message) => {
     const channelId = message[0].channel_map_id;
     const messageId = message[0].id;
+=======
+  )
+    .then((message) => {
+      const channelId = message[0].channel_id;
+      const messageId = message[0].message_id;
+>>>>>>> 815ae2e3d59358689b98a530bcb16491d21cf66d
 
     const newMessage = {};
     newMessage[channelId] = {}; // Slack's channel ID as key
     newMessage[channelId][messageId] = {}; // Our message ID as key
 
+<<<<<<< HEAD
     newMessage[channelId][messageId].avatarImage = '';
     newMessage[channelId][messageId].userId = message[0].user_map_id;
     newMessage[channelId][messageId].name = req.body.event.user; // To be changed after MVP
     newMessage[channelId][messageId].text = message[0].message;
     newMessage[channelId][messageId].timestamp = message[0].message_timestamp;
     newMessage[channelId][messageId].channelId = message[0].channel_map_id;
+=======
+      newMessage[channelId][messageId].avatarImage = '';
+      newMessage[channelId][messageId].userId = message[0].user_id;
+      newMessage[channelId][messageId].name = req.body.event.user;// To be changed after MVP
+      newMessage[channelId][messageId].text = message[0].message;
+      newMessage[channelId][messageId].timestamp = message[0].message_timestamp;
+      newMessage[channelId][messageId].channelId = message[0].channel_id;
+>>>>>>> 815ae2e3d59358689b98a530bcb16491d21cf66d
 
     io.sockets.emit('messages', newMessage);
 
+<<<<<<< HEAD
     analyzeSentimentAndSaveScore(io, message[0].channel_map_id);
   });
+=======
+      analyzeSentimentAndSaveScore(io, message[0].channel_id);
+    });
+>>>>>>> 815ae2e3d59358689b98a530bcb16491d21cf66d
 }
 
 router.get('/auth/redirect', (req, res) => {
@@ -78,7 +99,11 @@ function setEvents(io) {
         break;
 
       default:
+<<<<<<< HEAD
       // for now, ignore any messages not handled by the case conditions
+=======
+        // for now, ignore any messages not handled by the case conditions
+>>>>>>> 815ae2e3d59358689b98a530bcb16491d21cf66d
     }
     res.sendStatus(200);
   });

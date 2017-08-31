@@ -1,8 +1,8 @@
-exports.seed = knex => knex('sentiment_score').del()
-  .then(() => knex('sentiment_score').insert([
+exports.seed = knex => knex('sentiment_scores').del()
+  .then(() => knex('sentiment_scores').insert([
     {
-      id: 1,
-      channel_map_id: 1,
+      sentiment_score_id: 1,
+      channel_id: 'C6E2XMK4H',
       score: 0.50,
       magnitude: 30,
       number_of_messages: 100,
@@ -10,8 +10,8 @@ exports.seed = knex => knex('sentiment_score').del()
       updated_at: new Date('2017-07-31 14:26:16 UTC'),
     },
     {
-      id: 2,
-      channel_map_id: 1,
+      sentiment_score_id: 2,
+      channel_id: 'C6E2XMK4H',
       score: -0.50,
       magnitude: 32,
       number_of_messages: 100,
@@ -19,8 +19,8 @@ exports.seed = knex => knex('sentiment_score').del()
       updated_at: new Date('2017-07-31 14:26:16 UTC'),
     },
     {
-      id: 3,
-      channel_map_id: 2,
+      sentiment_score_id: 3,
+      channel_id: 'C6DUVSW3A',
       score: 0.02,
       magnitude: 15,
       number_of_messages: 100,
@@ -28,4 +28,4 @@ exports.seed = knex => knex('sentiment_score').del()
       updated_at: new Date('2017-07-31 14:26:16 UTC'),
     },
   ]))
-  .then(() => knex.raw('SELECT setval(\'sentiment_score_id_seq\', (SELECT MAX(id) FROM sentiment_score))'));
+  .then(() => knex.raw('SELECT setval(\'sentiment_scores_sentiment_score_id_seq\', (SELECT MAX(sentiment_score_id) FROM sentiment_scores))'));

@@ -1,26 +1,31 @@
 const knex = require('../knex');
 const rp = require('request-promise');
 
-function getUsersData() {
-  return knex('user_map').select('user_name');
+function getUsers() {
+  return knex('users');
 }
 
 function getUserData(slackUserId) {
-  return knex('user_map').where('user_id', slackUserId).select('user_name');
+  return knex('users').where('user_id', slackUserId).select('user_name');
 }
 
-function fetchUserDataFromSlack(slackUserId, token) {
+function addUserDataFromSlack(slackUserId, token) {
   const options = {
     method: 'GET',
     uri: 'https://slack.com/api/users.info',
     qs: { user: slackUserId, token },
     json: true,
   };
-  rp(options).then(data => knex('user_map').insert({
+  rp(options).then(data => knex('users').insert({
     user_id: slackUserId,
     user_name: data.user.name,
-    // user_real_name: data.user.real_name,
+    real_name: data.user.real_name,
+    first_name: data.user.profile.first_name,
+    last_name: data.user.profile.last_name,
+    status_emoji: data.user.profile.status_emoji || '',
+    image_24: data.user.profile.image_24,
+    image_512: data.user.profile.image_512,
   }, '*'));
 }
 
-module.exports = { getUsersData, getUserData, fetchUserDataFromSlack };
+module.exports = { getUsers, getUserData, addUserDataFromSlack };
