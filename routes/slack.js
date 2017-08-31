@@ -1,37 +1,9 @@
 const express = require('express');
 const request = require('request');
-const { writeMessage } = require('../repositories/event-repository');
-const { analyzeSentimentAndSaveScore } = require('../src/sentiment');
+
+const { handleNewMessageEvent } = require('../src/slack/message-event-handlers');
 
 const router = express.Router();
-
-function handleNewMessageEvent(io, req) {
-  return writeMessage(
-    req.body.event.user,
-    req.body.event.text,
-    req.body.event.ts,
-    req.body.event.channel,
-  )
-    .then((message) => {
-      const channelId = message[0].channel_id;
-      const messageId = message[0].message_id;
-
-      const newMessage = {};
-      newMessage[channelId] = {}; // Slack's channel ID as key
-      newMessage[channelId][messageId] = {}; // Our message ID as key
-
-      newMessage[channelId][messageId].avatarImage = '';
-      newMessage[channelId][messageId].userId = message[0].user_id;
-      newMessage[channelId][messageId].name = req.body.event.user;// To be changed after MVP
-      newMessage[channelId][messageId].text = message[0].message;
-      newMessage[channelId][messageId].timestamp = message[0].message_timestamp;
-      newMessage[channelId][messageId].channelId = message[0].channel_id;
-
-      io.sockets.emit('messages', newMessage);
-
-      analyzeSentimentAndSaveScore(io, message[0].channel_id);
-    });
-}
 
 router.get('/auth/redirect', (req, res) => {
   const options = {
@@ -62,6 +34,7 @@ router.get('/auth', (req, res) => {
 
 function setEvents(io) {
   router.post('/events', (req, res) => {
+    console.log(req.body.event);
     switch (req.body.event.type) {
       case 'message':
         // message edited
