@@ -130,7 +130,7 @@ suite(
             {
               sentiment_score_id: 1,
               channel_id: 'C6E2XMK4H',
-              score: 0.55,
+              score: '0.55',
               magnitude: 30,
               number_of_messages: 100,
               created_at: new Date('2017-07-31 14:26:16 UTC'),
@@ -139,7 +139,7 @@ suite(
             {
               sentiment_score_id: 2,
               channel_id: 'C6E2XMK4H',
-              score: -0.5,
+              score: '-0.50',
               magnitude: 32,
               number_of_messages: 100,
               created_at: new Date('2017-07-31 14:26:16 UTC'),
@@ -148,7 +148,7 @@ suite(
             {
               sentiment_score_id: 3,
               channel_id: 'C6DUVSW3A',
-              score: 0.02,
+              score: '0.02',
               magnitude: 15,
               number_of_messages: 100,
               created_at: new Date('2017-07-31 14:26:16 UTC'),
