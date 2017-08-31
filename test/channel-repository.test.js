@@ -42,8 +42,17 @@ describe(
     });
 
     it('should return an object', () => {
-      getChannelById(1).then((result) => {
+      getChannelById('C6E2XMK4H').then((result) => {
         expect(result).to.be.a('object');
+      });
+    });
+
+    it('should return an object with channelId and channelName', () => {
+      getChannelById('C6E2XMK4H').then((result) => {
+        expect(result).to.deep.equal({
+          channelId: 'C6E2XMK4H',
+          channelName: 'general',
+        });
       });
     });
   }),

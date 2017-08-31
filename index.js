@@ -15,22 +15,17 @@ const port = process.env.PORT || 8001;
 const slack = require('./routes/slack');
 const channels = require('./routes/channels');
 const messages = require('./routes/messages');
-// const index = require('./routes/index');
+const index = require('./routes/index');
 
-app.use('/slack', slack.router);
-app.use('/channels', channels);
-app.use('/messages', messages);
-// app.use('/', index);
-
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(cors());
-
-app.get('/', (req, res) => {
-  res.sendStatus(200);
-});
+app.use('/slack', slack.router);
+app.use('/channels', channels);
+app.use('/messages', messages);
+app.use('/', index);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
