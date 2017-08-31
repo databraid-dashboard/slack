@@ -11,36 +11,40 @@ const expect = require('chai').expect;
 const { writeOption, readOption } = require('../repositories/option-repository');
 const { addDatabaseHooks } = require('./utils');
 
-describe('Options Repo writeOption', addDatabaseHooks(() => {
-  it('should exist', () => {
-    expect(writeOption).to.exist;
-  });
+describe(
+  'Options Repo writeOption',
+  addDatabaseHooks(() => {
+    it('should exist', () => {
+      expect(writeOption).to.exist;
+    });
 
-  it('should be a function', () => {
-    expect(writeOption).is.a('function');
-  });
+    it('should be a function', () => {
+      expect(writeOption).is.a('function');
+    });
 
-  it('should return an array', () => {
-    writeOption()
-      .then((result) => {
+    it('should return an array', () => {
+      writeOption().then((result) => {
         expect(result).to.be.a('array');
       });
-  });
-}));
+    });
+  }),
+);
 
-describe('Options Repo readOption', addDatabaseHooks(() => {
-  it('should exist', () => {
-    expect(readOption).to.exist;
-  });
+describe(
+  'Options Repo readOption',
+  addDatabaseHooks(() => {
+    it('should exist', () => {
+      expect(readOption).to.exist;
+    });
 
-  it('should be a function', () => {
-    expect(readOption).is.a('function');
-  });
+    it('should be a function', () => {
+      expect(readOption).is.a('function');
+    });
 
-  it('should return an array', () => {
-    readOption()
-      .then((result) => {
+    it('should return an array', () => {
+      readOption('oauth_token').then((result) => {
         expect(result).to.be.a('array');
       });
-  });
-}));
+    });
+  }),
+);
