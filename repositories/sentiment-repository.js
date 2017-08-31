@@ -10,13 +10,15 @@ function fetchMessageBatch(channelId) {
 }
 
 function addSentimentScore(sentimentScore, magnitudeScore, channelId, numberOfMessages) {
-  return knex('sentiment_scores')
-    .insert({
+  return knex('sentiment_scores').insert(
+    {
       channel_id: channelId,
       score: sentimentScore,
       magnitude: magnitudeScore,
       number_of_messages: numberOfMessages,
-    }, '*');
+    },
+    '*',
+  );
 }
 
 module.exports = { fetchMessageBatch, addSentimentScore };
