@@ -98,8 +98,8 @@ suite(
         .then((actual) => {
           const expected = [
             {
-              channel_id: 'l847630912p',
-              channel_name: 'channel',
+              channel_id: 'C6E2XMLAV',
+              channel_name: 'random',
             },
             {
               channel_id: 'C6DUVSW3A',
@@ -175,7 +175,7 @@ suite(
             {
               message_id: 1,
               user_id: 'U6FMJ3J3Z',
-              channel_id: 'l847630912p',
+              channel_id: 'C6E2XMLAV',
               raw_ts: '1501624043.643661',
               message_timestamp: new Date(1501624043.643661 * 1000),
               message: 'This is a message. This is what I would send over slack in this channel.',
@@ -183,7 +183,7 @@ suite(
             {
               message_id: 2,
               user_id: 'U6KESJ1BN',
-              channel_id: 'l847630912p',
+              channel_id: 'C6E2XMLAV',
               raw_ts: '1501625043.643661',
               message_timestamp: new Date(1501625043.643661 * 1000),
               message: 'This is a great new message. This is different than the last message.',

@@ -6,7 +6,7 @@ exports.up = knex =>
       .notNullable()
       .references('user_id')
       .inTable('users')
-      .onDelete('CASCADE')
+      .onDelete('cascade')
       .index();
     table
       .string('channel_id')

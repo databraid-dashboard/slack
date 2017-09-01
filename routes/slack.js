@@ -1,39 +1,13 @@
 const express = require('express');
 const request = require('request');
-const { writeMessage } = require('../repositories/event-repository');
 const { updateOption } = require('../repositories/option-repository');
-const { analyzeSentimentAndSaveScore } = require('../src/sentiment');
+const { handleNewMessageEvent } = require('../src/slack/message-event-handlers');
 const cors = require('cors');
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
 
 router.use(cors());
-
-function handleNewMessageEvent(io, req) {
-  return writeMessage(
-    req.body.event.user,
-    req.body.event.text,
-    req.body.event.ts,
-    req.body.event.channel,
-  ).then((message) => {
-    const channelId = message[0].channel_id;
-    const messageId = message[0].message_id;
-    const newMessage = {};
-    newMessage[channelId] = {}; // Slack's channel ID as key
-    newMessage[channelId][messageId] = {}; // Our message ID as key
-    newMessage[channelId][messageId].avatarImage = '';
-    newMessage[channelId][messageId].userId = message[0].user_id;
-    newMessage[channelId][messageId].name = req.body.event.user; // To be changed after MVP
-    newMessage[channelId][messageId].text = message[0].message;
-    newMessage[channelId][messageId].timestamp = message[0].message_timestamp;
-    newMessage[channelId][messageId].channelId = message[0].channel_id;
-
-    io.sockets.emit('messages', newMessage);
-
-    analyzeSentimentAndSaveScore(io, message[0].channel_id);
-  });
-}
 
 router.get('/auth/redirect', (req, res) => {
   // This gets hit after click event to log in, and the slack 'app' sends back a code
@@ -62,16 +36,18 @@ router.get('/auth', (req, res) => {
 });
 
 function setEvents(io) {
-  // This gets hit after a message is sent inside the literal slack app, and picked up by the slack 'app' (https://api.slack.com/apps/Databraid_Slack_App)
+  // This gets hit after a message is sent inside the literal slack app
+  // and picked up by the slack 'app' (https://api.slack.com/apps/Databraid_Slack_App)
   router.post('/events', (req, res) => {
-    switch (req.body.event.type) {
+    const { type, subtype } = req.body.event;
+    switch (type) {
       case 'message':
         // message edited
-        if (req.body.event.previous_message) {
+        if (subtype === 'message_changed') {
           break;
         }
         // message deleted
-        if (req.body.event.subtype && req.body.event.subtype === 'message_deleted') {
+        if (subtype === 'message_deleted') {
           break;
         }
         // message posted
@@ -79,7 +55,7 @@ function setEvents(io) {
         break;
 
       default:
-      // for now, ignore any messages not handled by the case conditions
+        // for now, ignore any messages not handled by the case conditions
     }
     res.sendStatus(200);
   });

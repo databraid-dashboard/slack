@@ -1,4 +1,5 @@
 const knex = require('../knex');
+const { camelizeKeys } = require('humps');
 
 function fetchMessageBatch(channelId) {
   return knex('messages')
@@ -10,15 +11,25 @@ function fetchMessageBatch(channelId) {
 }
 
 function addSentimentScore(sentimentScore, magnitudeScore, channelId, numberOfMessages) {
-  return knex('sentiment_scores').insert(
-    {
+  return knex('sentiment_scores')
+    .insert({
       channel_id: channelId,
       score: sentimentScore,
       magnitude: magnitudeScore,
       number_of_messages: numberOfMessages,
-    },
-    '*',
-  );
+    }, 'sentiment_score_id')
+    .then(row => camelizeKeys(row))
+    .catch(err => err);
 }
 
-module.exports = { fetchMessageBatch, addSentimentScore };
+function buildWidgetSentimentScore(sentimentScoreId) {
+  return knex('sentiment_scores')
+    .first()
+    .select('channel_name', 'score')
+    .innerJoin('channels', 'sentiment_scores.channel_id', 'channels.channel_id')
+    .where('sentiment_score_id', sentimentScoreId)
+    .then(row => camelizeKeys(row))
+    .catch(err => err);
+}
+
+module.exports = { fetchMessageBatch, addSentimentScore, buildWidgetSentimentScore };
