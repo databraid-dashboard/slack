@@ -3,7 +3,7 @@ exports.seed = knex => knex('sentiment_scores').del()
     {
       sentiment_score_id: 1,
       channel_id: 'C6E2XMK4H',
-      score: 0.50,
+      score: 0.55,
       magnitude: 30,
       number_of_messages: 100,
       created_at: new Date('2017-07-31 14:26:16 UTC'),

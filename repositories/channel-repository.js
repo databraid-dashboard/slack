@@ -7,4 +7,11 @@ function getChannels() {
     .then(result => camelizeKeys(result));
 }
 
-module.exports = { getChannels };
+function getChannelById(id) {
+  return knex('channels')
+    .where('channel_id', id)
+    .first()
+    .then(result => camelizeKeys(result));
+}
+
+module.exports = { getChannels, getChannelById };

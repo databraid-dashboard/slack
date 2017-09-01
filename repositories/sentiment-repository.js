@@ -16,7 +16,9 @@ function addSentimentScore(sentimentScore, magnitudeScore, channelId, numberOfMe
       score: sentimentScore,
       magnitude: magnitudeScore,
       number_of_messages: numberOfMessages,
-    }, '*');
+    },
+    '*',
+    );
 }
 
 module.exports = { fetchMessageBatch, addSentimentScore };

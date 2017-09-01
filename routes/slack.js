@@ -1,25 +1,28 @@
 const express = require('express');
 const request = require('request');
-
+const { updateOption } = require('../repositories/option-repository');
 const { handleNewMessageEvent } = require('../src/slack/message-event-handlers');
+const cors = require('cors');
 
+// eslint-disable-next-line new-cap
 const router = express.Router();
 
+router.use(cors());
+
 router.get('/auth/redirect', (req, res) => {
+  // This gets hit after click event to log in, and the slack 'app' sends back a code
   const options = {
-    uri: `https://slack.com/api/oauth.access?code=${
-      req.query.code
-    }&client_id=${process.env.SLACK_CLIENT_ID
-    }&client_secret=${process.env.SLACK_CLIENT_SECRET}`,
+    uri: `https://slack.com/api/oauth.access?code=${req.query.code}&client_id=${process.env
+      .SLACK_CLIENT_ID}&client_secret=${process.env.SLACK_CLIENT_SECRET}`,
     method: 'GET',
   };
 
   request(options, (error, response, body) => {
     const JSONresponse = JSON.parse(body);
-
     if (!JSONresponse.ok) {
       res.send(`Error encountered: \n${JSON.stringify(JSONresponse)}`).status(200).end();
     } else {
+      updateOption('oauth_token', JSONresponse.access_token);
       res.redirect('/');
     }
   });
@@ -33,8 +36,8 @@ router.get('/auth', (req, res) => {
 });
 
 function setEvents(io) {
+  // This gets hit after a message is sent inside the literal slack app, and picked up by the slack 'app' (https://api.slack.com/apps/Databraid_Slack_App)
   router.post('/events', (req, res) => {
-    console.log(req.body.event);
     switch (req.body.event.type) {
       case 'message':
         // message edited
@@ -42,8 +45,7 @@ function setEvents(io) {
           break;
         }
         // message deleted
-        if (req.body.event.subtype
-          && req.body.event.subtype === 'message_deleted') {
+        if (req.body.event.subtype && req.body.event.subtype === 'message_deleted') {
           break;
         }
         // message posted
