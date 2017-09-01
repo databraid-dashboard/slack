@@ -7,17 +7,17 @@ function handleNewMessageEvent(io, req) {
   return writeMessage(user, text, ts, channel)
     .then(result => buildWidgetMessage(result[0]))
     .then((message) => {
-      const { channelId, messageId } = message;
+      const { channelId, channelName, messageId } = message;
 
       const newMessage = {};
-      newMessage[channelId] = {}; // Slack's channel ID as key
-      newMessage[channelId][messageId] = {}; // Our message ID as key
-      newMessage[channelId][messageId].avatarImage = message.image24;
-      newMessage[channelId][messageId].userId = message.userId;
-      newMessage[channelId][messageId].name = message.userName;
-      newMessage[channelId][messageId].text = message.message;
-      newMessage[channelId][messageId].timestamp = message.messageTimestamp;
-      newMessage[channelId][messageId].channelId = channelId;
+      newMessage[channelName] = {}; // Slack's channel ID as key
+      newMessage[channelName][messageId] = {}; // Our message ID as key
+      newMessage[channelName][messageId].avatarImage = message.image24;
+      newMessage[channelName][messageId].userId = message.userId;
+      newMessage[channelName][messageId].name = message.userName;
+      newMessage[channelName][messageId].text = message.message;
+      newMessage[channelName][messageId].timestamp = message.messageTimestamp;
+      newMessage[channelName][messageId].channelId = channelId;
 
       io.sockets.emit('messages', newMessage);
 

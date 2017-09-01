@@ -36,16 +36,18 @@ router.get('/auth', (req, res) => {
 });
 
 function setEvents(io) {
-  // This gets hit after a message is sent inside the literal slack app, and picked up by the slack 'app' (https://api.slack.com/apps/Databraid_Slack_App)
+  // This gets hit after a message is sent inside the literal slack app
+  // and picked up by the slack 'app' (https://api.slack.com/apps/Databraid_Slack_App)
   router.post('/events', (req, res) => {
-    switch (req.body.event.type) {
+    const { type, subtype } = req.body.event;
+    switch (type) {
       case 'message':
         // message edited
-        if (req.body.event.previous_message) {
+        if (subtype === 'message_changed') {
           break;
         }
         // message deleted
-        if (req.body.event.subtype && req.body.event.subtype === 'message_deleted') {
+        if (subtype === 'message_deleted') {
           break;
         }
         // message posted
