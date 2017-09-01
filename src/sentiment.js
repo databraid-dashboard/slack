@@ -4,7 +4,9 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const Language = require('@google-cloud/language');
-const { fetchMessageBatch, addSentimentScore } = require('../repositories/sentiment-repository');
+const { fetchMessageBatch,
+  addSentimentScore,
+  buildWidgetSentimentScore } = require('../repositories/sentiment-repository');
 
 const language = Language();
 
@@ -35,9 +37,10 @@ function analyzeSentimentAndSaveScore(io, channelId = 1) {
         numberOfMessages,
       );
     })
+    .then(result => buildWidgetSentimentScore(result[0]))
     .then((scoreData) => {
       const newScoreData = {};
-      newScoreData[channelId] = scoreData[0].score;
+      newScoreData[scoreData.channelName] = scoreData.score;
 
       io.sockets.emit('score', newScoreData);
     })
