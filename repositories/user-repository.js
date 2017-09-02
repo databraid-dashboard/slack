@@ -16,7 +16,7 @@ function addUserDataFromSlack(slackUserId, token) {
     qs: { user: slackUserId, token },
     json: true,
   };
-  rp(options).then(data => knex('users').insert({
+  return rp(options).then(data => knex('users').insert({
     user_id: slackUserId,
     user_name: data.user.name,
     real_name: data.user.real_name,
@@ -25,7 +25,7 @@ function addUserDataFromSlack(slackUserId, token) {
     status_emoji: data.user.profile.status_emoji || '',
     image_24: data.user.profile.image_24,
     image_512: data.user.profile.image_512,
-  }, '*'));
+  }));
 }
 
 module.exports = { getUsers, getUserData, addUserDataFromSlack };

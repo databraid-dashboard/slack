@@ -8,6 +8,8 @@ after(() => {
 });
 
 const expect = require('chai').expect;
+const nock = require('nock');
+const knex = require('../knex');
 const { getUsers, getUserData, addUserDataFromSlack } = require('../repositories/user-repository');
 const { addDatabaseHooks } = require('./utils');
 
@@ -131,6 +133,39 @@ describe(
 
     it('should be a function', () => {
       expect(addUserDataFromSlack).is.a('function');
+    });
+
+    it('should put user id and name in database', () => {
+      nock('https://slack.com')
+        .get('/api/users.info')
+        .query({
+          user: 'ABC123DEF',
+          token: 'xoxp-218630306018-230609873190-230462324853-fc311e59fb6a01910e5012ba22caf129',
+        })
+        .reply(200, {
+          ok: true,
+          user: {
+            id: 'ABC123DEF',
+            team_id: 'T6EJM120J',
+            name: 'johndoe',
+            real_name: 'John Doe',
+            profile: {
+              first_name: 'John',
+              last_name: 'Doe',
+              image_24: 'https://secure.gravatar.com/avatar/12345.png',
+              image_512: 'https://secure.gravatar.com/avatar/12346.png',
+            },
+          },
+        });
+
+      const slackUserId = 'ABC123DEF';
+      const token = 'xoxp-218630306018-230609873190-230462324853-fc311e59fb6a01910e5012ba22caf129';
+      addUserDataFromSlack(slackUserId, token)
+        .then(() =>
+          knex('users').where({ user_id: slackUserId }).select('user_name')
+            .then((result) => {
+              expect(result).to.deep.equal([{ user_name: 'johndoe' }]);
+            }));
     });
   }),
 );

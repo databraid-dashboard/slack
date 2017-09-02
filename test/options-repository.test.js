@@ -8,24 +8,25 @@ after(() => {
 });
 
 const expect = require('chai').expect;
-const { writeOption, readOption } = require('../repositories/option-repository');
+const { updateOption, readOption } = require('../repositories/option-repository');
 const { addDatabaseHooks } = require('./utils');
 
 describe(
-  'Options Repo writeOption',
+  'Options Repo updateOption',
   addDatabaseHooks(() => {
     it('should exist', () => {
-      expect(writeOption).to.exist;
+      expect(updateOption).to.exist;
     });
 
     it('should be a function', () => {
-      expect(writeOption).is.a('function');
+      expect(updateOption).is.a('function');
     });
 
     it('should return an array', () => {
-      writeOption().then((result) => {
-        expect(result).to.be.a('array');
-      });
+      updateOption('oauth_token', '123456789')
+        .then((result) => {
+          expect(result).to.equal(1);
+        });
     });
   }),
 );
