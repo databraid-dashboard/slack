@@ -1,7 +1,9 @@
 const express = require('express');
 const request = require('request');
 const { updateOption } = require('../repositories/option-repository');
-const { handleNewMessageEvent } = require('../src/slack/message-event-handlers');
+const { handleNewMessageEvent,
+  handleEditMessageEvent,
+  handleDeleteMessageEvent } = require('../src/slack/message-event-handlers');
 const cors = require('cors');
 
 // eslint-disable-next-line new-cap
@@ -44,10 +46,12 @@ function setEvents(io) {
       case 'message':
         // message edited
         if (subtype === 'message_changed') {
+          handleEditMessageEvent(req);
           break;
         }
         // message deleted
         if (subtype === 'message_deleted') {
+          handleDeleteMessageEvent(req);
           break;
         }
         // message posted

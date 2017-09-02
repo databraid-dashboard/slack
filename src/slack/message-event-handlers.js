@@ -1,4 +1,5 @@
 const { writeMessage, buildWidgetMessage } = require('../../repositories/event-repository');
+const { updateMessage, deleteMessage } = require('../../repositories/message-repository');
 const { analyzeSentimentAndSaveScore } = require('../sentiment');
 
 function handleNewMessageEvent(io, req) {
@@ -10,7 +11,7 @@ function handleNewMessageEvent(io, req) {
       const { channelId, channelName, messageId } = message;
 
       const newMessage = {};
-      newMessage[channelName] = {}; // Slack's channel ID as key
+      newMessage[channelName] = {}; // Slack's channel name as key
       newMessage[channelName][messageId] = {}; // Our message ID as key
       newMessage[channelName][messageId].avatarImage = message.image24;
       newMessage[channelName][messageId].userId = message.userId;
@@ -25,4 +26,18 @@ function handleNewMessageEvent(io, req) {
     });
 }
 
-module.exports = { handleNewMessageEvent };
+function handleEditMessageEvent(req) {
+  const { channel, message } = req.body.event;
+
+  return updateMessage(channel, message);
+}
+
+function handleDeleteMessageEvent(req) {
+  const { channel, deleted_ts } = req.body.event;
+
+  return deleteMessage(channel, deleted_ts);
+}
+
+module.exports = { handleNewMessageEvent,
+  handleEditMessageEvent,
+  handleDeleteMessageEvent };
