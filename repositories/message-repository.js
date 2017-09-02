@@ -2,13 +2,23 @@ const knex = require('../knex.js');
 const { camelizeKeys } = require('humps');
 
 function getMessages() {
-  return knex('messages').orderBy('message_id').then(result => camelizeKeys(result));
+  return knex('messages')
+    .orderBy('message_id')
+    .then(result => camelizeKeys(result));
 }
 
 function getMessagesByChannelName(channelName) {
-  const subquery = knex('channels').select('channel_id').where('channel_name', channelName);
-
-  return knex('messages').where('channel_id', 'in', subquery).then(result => camelizeKeys(result));
+  return knex('messages')
+    .select('message_id',
+      'user_id',
+      'messages.channel_id',
+      'raw_ts',
+      'message_timestamp',
+      'message')
+    .innerJoin('channels', 'channels.channel_id', 'messages.channel_id')
+    .where('channel_name', channelName)
+    .then(result => camelizeKeys(result))
+    .catch(e => e);
 }
 
 function updateMessage(channelId, message) {
