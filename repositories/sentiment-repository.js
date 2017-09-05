@@ -7,17 +7,21 @@ function fetchMessageBatch(channelId) {
     .where('channels.channel_id', channelId)
     .select('messages')
     .orderBy('messages.message_id', 'desc')
-    .limit(100);
+    .limit(100)
+    .catch(err => err);
 }
 
 function addSentimentScore(sentimentScore, magnitudeScore, channelId, numberOfMessages) {
   return knex('sentiment_scores')
-    .insert({
-      channel_id: channelId,
-      score: sentimentScore,
-      magnitude: magnitudeScore,
-      number_of_messages: numberOfMessages,
-    }, 'sentiment_score_id')
+    .insert(
+      {
+        channel_id: channelId,
+        score: sentimentScore,
+        magnitude: magnitudeScore,
+        number_of_messages: numberOfMessages,
+      },
+      'sentiment_score_id',
+    )
     .then(row => camelizeKeys(row))
     .catch(err => err);
 }
