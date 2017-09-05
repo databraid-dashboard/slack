@@ -46,5 +46,30 @@ describe(
         expect(result).to.be.a('array');
       });
     });
+
+    it('should return an array with correct message info', () => {
+      getMessagesByChannelName('dev').then((result) => {
+        expect(result).to.deep.equal([
+          {
+            messageId: 3,
+            userId: 'U6T3VM814',
+            channelId: 'C6DUVSW3A',
+            rawTs: '1501626043.643661',
+            messageTimestamp: new Date('2017-08-01T22:20:43.643Z'),
+            message: 'Happy things! Look at this message. It is sooooo cool.',
+            channelName: 'dev',
+            userName: 'tylerlangenbrunner',
+            realName: 'Tyler Langenbrunner',
+            firstName: 'Tyler',
+            lastName: 'Langenbrunner',
+            statusEmoji: ':slack:',
+            image24:
+              'https://secure.gravatar.com/avatar/bffb6bb05942ed7400905f9ceb0f6cdf.jpg?s=24&d=https%3A%2F%2Fa.slack-edge.com%2F66f9%2Fimg%2Favatars%2Fava_0011-24.png',
+            image512:
+              'https://secure.gravatar.com/avatar/bffb6bb05942ed7400905f9ceb0f6cdf.jpg?s=512&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0011-512.png',
+          },
+        ]);
+      });
+    });
   }),
 );
