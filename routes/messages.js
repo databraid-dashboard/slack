@@ -16,9 +16,8 @@ router.get('/', (req, res, next) => {
 
 router.get('/:channelName', (req, res, next) => {
   getMessagesByChannelName(req.params.channelName)
-    .then(messages =>
+    .then((messages) => {
       const tailoredMessages = messages.map((msgObj) => {
-        console.log('......', msgObj);
         const msg = {};
         msg.messageId = msgObj.messageId;
         msg.avatarImage = msgObj.image24;
@@ -32,10 +31,8 @@ router.get('/:channelName', (req, res, next) => {
         return msg;
       });
 
-      console.log('SENDING TO FRONTEND >>>>>>', tailoredMessages);
       return res.status(200).send(tailoredMessages);
-      // res.status(200).send(messages),
-    )
+    })
     .catch((err) => {
       next(err);
     });

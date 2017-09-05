@@ -20,7 +20,10 @@ router.get('/auth/redirect', (req, res) => {
   request(options, (error, response, body) => {
     const JSONresponse = JSON.parse(body);
     if (!JSONresponse.ok) {
-      res.send(`Error encountered: \n${JSON.stringify(JSONresponse)}`).status(200).end();
+      res
+        .send(`Error encountered: \n${JSON.stringify(JSONresponse)}`)
+        .status(200)
+        .end();
     } else {
       updateOption('oauth_token', JSONresponse.access_token);
       res.redirect('/');
@@ -55,7 +58,7 @@ function setEvents(io) {
         break;
 
       default:
-        // for now, ignore any messages not handled by the case conditions
+      // for now, ignore any messages not handled by the case conditions
     }
     res.sendStatus(200);
   });
