@@ -178,7 +178,7 @@ suite(
               channel_id: 'C6E2XMLAV',
               raw_ts: '1501624043.643661',
               message_timestamp: new Date(1501624043.643661 * 1000),
-              message: 'This is a message. This is what I would send over slack in this channel.',
+              message: 'Nice work! We have 5 PRs and 3 trello tasks completed already today, Nice!',
             },
             {
               message_id: 2,
@@ -210,7 +210,7 @@ suite(
               channel_id: 'C6E2XMK4H',
               raw_ts: '1501628043.643661',
               message_timestamp: new Date(1501628043.643661 * 1000),
-              message: 'This is the last message I will add.',
+              message: "I've been in merge conflict hell all day.",
             },
           ];
 
