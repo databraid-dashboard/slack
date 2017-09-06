@@ -8,9 +8,12 @@ after(() => {
 });
 
 const expect = require('chai').expect;
-const { fetchMessageBatch,
+const {
+  fetchMessageBatch,
   addSentimentScore,
-  buildWidgetSentimentScore } = require('../repositories/sentiment-repository.js');
+  buildWidgetSentimentScore,
+  getSentimentScoreByChannelName,
+} = require('../repositories/sentiment-repository.js');
 const { addDatabaseHooks } = require('./utils');
 
 describe(
@@ -52,22 +55,46 @@ describe(
   }),
 );
 
-describe('buildWidgetSentimentScore', addDatabaseHooks(() => {
-  it('should exist', () => {
-    expect(buildWidgetSentimentScore).to.exist;
-  });
+describe(
+  'buildWidgetSentimentScore',
+  addDatabaseHooks(() => {
+    it('should exist', () => {
+      expect(buildWidgetSentimentScore).to.exist;
+    });
 
-  it('should be a function', () => {
-    expect(buildWidgetSentimentScore).is.a('function');
-  });
+    it('should be a function', () => {
+      expect(buildWidgetSentimentScore).is.a('function');
+    });
 
-  it('should return an object with the channel name and score', () => {
-    buildWidgetSentimentScore(1)
-      .then((result) => {
+    it('should return an object with the channel name and score', () => {
+      buildWidgetSentimentScore(1).then((result) => {
         expect(result).to.deep.equal({
           channelName: 'general',
           score: '0.55',
         });
       });
-  });
-}));
+    });
+  }),
+);
+
+describe(
+  'getSentimentScoreByChannelName',
+  addDatabaseHooks(() => {
+    it('should exist', () => {
+      expect(getSentimentScoreByChannelName).to.exist;
+    });
+
+    it('should be a function', () => {
+      expect(getSentimentScoreByChannelName).is.a('function');
+    });
+
+    it('should return an object with the channel name and score', () => {
+      getSentimentScoreByChannelName('random').then((result) => {
+        expect(result).to.deep.equal({
+          channelName: 'random',
+          score: '0.00',
+        });
+      });
+    });
+  }),
+);
