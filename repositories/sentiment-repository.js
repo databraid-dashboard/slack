@@ -36,4 +36,19 @@ function buildWidgetSentimentScore(sentimentScoreId) {
     .catch(err => err);
 }
 
-module.exports = { fetchMessageBatch, addSentimentScore, buildWidgetSentimentScore };
+function getSentimentScoreByChannelName(channelName) {
+  return knex('sentiment_scores')
+    .first()
+    .select('channel_name', 'score')
+    .innerJoin('channels', 'sentiment_scores.channel_id', 'channels.channel_id')
+    .where('channel_name', channelName)
+    .then(row => camelizeKeys(row))
+    .catch(err => err);
+}
+
+module.exports = {
+  fetchMessageBatch,
+  addSentimentScore,
+  buildWidgetSentimentScore,
+  getSentimentScoreByChannelName,
+};
