@@ -1,5 +1,5 @@
 const { writeMessage, buildWidgetMessage } = require('../../repositories/event-repository');
-const { analyzeSentimentAndSaveScore } = require('../sentiment');
+const { analyzeSentimentAndSaveScore } = require('./sentiment-event-handlers');
 
 function handleNewMessageEvent(io, req) {
   const { user, text, ts, channel } = req.body.event;
