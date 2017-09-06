@@ -154,6 +154,15 @@ suite(
               created_at: new Date('2017-07-31 14:26:16 UTC'),
               updated_at: new Date('2017-07-31 14:26:16 UTC'),
             },
+            {
+              sentiment_score_id: 4,
+              channel_id: 'C6E2XMLAV',
+              score: '0.00',
+              magnitude: 10,
+              number_of_messages: 100,
+              created_at: new Date('2017-07-31 14:26:16 UTC'),
+              updated_at: new Date('2017-07-31 14:26:16 UTC'),
+            },
           ];
 
           expected.forEach((row, i) => {
