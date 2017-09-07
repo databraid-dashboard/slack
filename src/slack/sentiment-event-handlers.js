@@ -1,3 +1,5 @@
+// NOTE: CONTENTS MOVED FROM src/slack/sentiment-event-handlers.js due to the additon of routes/sentiment.js -- in an attempt to avoid naming confusion
+
 if (process.env.NODE_ENV !== 'production') {
   /* eslint-disable global-require */
   require('dotenv').config();
@@ -8,16 +10,16 @@ const {
   fetchMessageBatch,
   addSentimentScore,
   buildWidgetSentimentScore,
-} = require('../repositories/sentiment-repository');
+} = require('../../repositories/sentiment-repository');
 
 const language = Language();
 
-function analyzeSentimentAndSaveScore(io, channelId = 1) {
+function analyzeSentimentAndSaveScore(io, channelId) {
   let numberOfMessages;
 
   fetchMessageBatch(channelId)
     .then((messages) => {
-      const messagesArray = messages.map(msgObject => msgObject.message);
+      const messagesArray = messages.map(msgObject => msgObject.messages);
       const messageString = messagesArray.join('\n');
       numberOfMessages = messagesArray.length;
       return messageString;
@@ -38,7 +40,6 @@ function analyzeSentimentAndSaveScore(io, channelId = 1) {
     .then((scoreData) => {
       const newScoreData = {};
       newScoreData[scoreData.channelName] = scoreData.score;
-
       io.sockets.emit('score', newScoreData);
     })
     .catch(err => err);
