@@ -1,0 +1,15 @@
+awsdeployment:
+  image: codeship/aws-deployment
+  encrypted_env_file: aws-deployment.env.encrypted
+  volumes:
+    - ./:/deploy
+
+slack-api:
+  build:
+    image: databraiddb/slack-api:latest
+    dockerfile: Dockerfile
+  links:
+    - postgres
+
+postgres:
+  image: databraiddb/slack-test-postgres:latest
