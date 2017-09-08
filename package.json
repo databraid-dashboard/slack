@@ -19,7 +19,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@databraid/env-util": "1.1.2",
+    "@databraid/env-util": "1.1.3",
     "@google-cloud/language": "0.11.0",
     "body-parser": "1.17.2",
     "cors": "2.8.4",
