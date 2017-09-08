@@ -10,7 +10,7 @@ const socket = require('socket.io');
 const cors = require('cors');
 
 const app = express();
-const port = process.env.PORT || 8001;
+const port = process.env.PORT || 8000;
 
 const slack = require('./routes/slack');
 const channels = require('./routes/channels');
