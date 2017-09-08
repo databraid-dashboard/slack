@@ -14,7 +14,7 @@
     "lint": "scripts/lint",
     "production-test": "scripts/production-test",
     "production-lint": "scripts/production-lint",
-    "start": "./node_modules/@databraid/env.util/index.js --bucket databraid --key slack-api && node index.js"
+    "start": "scripts/production-start"
   },
   "author": "",
   "license": "MIT",
