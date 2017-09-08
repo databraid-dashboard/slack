@@ -6,6 +6,7 @@ awsdeployment:
 
 slack-api:
   build:
+    image: databraiddb/slack-api:latest
     dockerfile: Dockerfile
   links:
     - postgres
