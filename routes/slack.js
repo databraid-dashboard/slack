@@ -1,6 +1,6 @@
 const express = require('express');
 const request = require('request');
-const { updateOption } = require('../repositories/option-repository');
+const { setOption } = require('../repositories/option-repository');
 const { handleNewMessageEvent } = require('../src/slack/message-event-handlers');
 const cors = require('cors');
 
@@ -25,7 +25,7 @@ router.get('/auth/redirect', (req, res) => {
         .status(200)
         .end();
     } else {
-      updateOption('oauth_token', JSONresponse.access_token);
+      setOption('oauth_token', JSONresponse.access_token);
       res.redirect('/');
     }
   });
