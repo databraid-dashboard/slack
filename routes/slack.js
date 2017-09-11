@@ -47,10 +47,12 @@ function setEvents(io) {
       case 'message':
         // message edited
         if (subtype === 'message_changed') {
+          handleEditMessageEvent(req);
           break;
         }
         // message deleted
         if (subtype === 'message_deleted') {
+          handleDeleteMessageEvent(req);
           break;
         }
         // message posted

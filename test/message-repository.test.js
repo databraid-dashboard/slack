@@ -8,11 +8,14 @@ after(() => {
 });
 
 const expect = require('chai').expect;
-const { getMessages, getMessagesByChannelName } = require('../repositories/message-repository');
+const { getMessages,
+  getMessagesByChannelName,
+  updateMessage,
+  deleteMessage } = require('../repositories/message-repository');
 const { addDatabaseHooks } = require('./utils');
 
 describe(
-  'Event Repo getMessages',
+  'Message Repo getMessages',
   addDatabaseHooks(() => {
     it('should exist', () => {
       expect(getMessages).to.exist;
@@ -31,7 +34,7 @@ describe(
 );
 
 describe(
-  'Event Repo getMessagesByChannelName',
+  'Message Repo getMessagesByChannelName',
   addDatabaseHooks(() => {
     it('should exist', () => {
       expect(getMessagesByChannelName).to.exist;
@@ -69,6 +72,73 @@ describe(
               'https://secure.gravatar.com/avatar/bffb6bb05942ed7400905f9ceb0f6cdf.jpg?s=512&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0011-512.png',
           },
         ]);
+      });
+    });
+  }),
+);
+
+describe(
+  'Message Repo updateMessage',
+  addDatabaseHooks(() => {
+    const channelId = 'C6E2XMLAV';
+    const message = {
+      type: 'message',
+      user: 'U6FMJ3J3Z',
+      text: 'Edit this message',
+      edited: {
+        user: 'U6FMJ3J3Z',
+        ts: '1501624043.643662',
+      },
+      ts: '1501624043.643661',
+    };
+
+    it('should exist', () => {
+      expect(updateMessage).to.exist;
+    });
+
+    it('should be a function', () => {
+      expect(updateMessage).is.a('function');
+    });
+
+    it('should return with status of 1 (update successful)', () => {
+      updateMessage(channelId, message).then((result) => {
+        expect(result).to.equal(1);
+      });
+    });
+
+    it('should return with status of 0 (update failed)', () => {
+      message.ts = '1234567890.123456';
+      updateMessage(channelId, message).then((result) => {
+        expect(result).to.equal(0);
+      });
+    });
+  }),
+);
+
+describe(
+  'Message Repo deleteMessage',
+  addDatabaseHooks(() => {
+    const channelId = 'C6E2XMLAV';
+
+    it('should exist', () => {
+      expect(deleteMessage).to.exist;
+    });
+
+    it('should be a function', () => {
+      expect(deleteMessage).is.a('function');
+    });
+
+    it('should return with status of 1 (delete successful)', () => {
+      timestamp = '1501624043.643661';
+      deleteMessage(channelId, timestamp).then((result) => {
+        expect(result).to.equal(1);
+      });
+    });
+
+    it('should return with status of 0 (delete failed)', () => {
+      timestamp = '1234567890.123456';
+      deleteMessage(channelId, timestamp).then((result) => {
+        expect(result).to.equal(0);
       });
     });
   }),
