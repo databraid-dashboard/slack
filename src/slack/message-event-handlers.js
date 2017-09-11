@@ -1,6 +1,6 @@
 const { writeMessage, buildWidgetMessage } = require('../../repositories/event-repository');
 const { updateMessage, deleteMessage } = require('../../repositories/message-repository');
-const { analyzeSentimentAndSaveScore } = require('../sentiment');
+const { analyzeSentimentAndSaveScore } = require('./sentiment-event-handlers');
 
 function handleNewMessageEvent(io, req) {
   const { user, text, ts, channel } = req.body.event;
@@ -15,7 +15,8 @@ function handleNewMessageEvent(io, req) {
       newMessage[channelName][messageId] = {}; // Our message ID as key
       newMessage[channelName][messageId].avatarImage = message.image24;
       newMessage[channelName][messageId].userId = message.userId;
-      newMessage[channelName][messageId].name = message.userName;
+      newMessage[channelName][messageId].name = message.realName;
+      newMessage[channelName][messageId].userName = message.userName;
       newMessage[channelName][messageId].text = message.message;
       newMessage[channelName][messageId].timestamp = message.messageTimestamp;
       newMessage[channelName][messageId].channelId = channelId;

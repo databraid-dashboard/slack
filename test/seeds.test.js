@@ -154,6 +154,15 @@ suite(
               created_at: new Date('2017-07-31 14:26:16 UTC'),
               updated_at: new Date('2017-07-31 14:26:16 UTC'),
             },
+            {
+              sentiment_score_id: 4,
+              channel_id: 'C6E2XMLAV',
+              score: '0.00',
+              magnitude: 10,
+              number_of_messages: 100,
+              created_at: new Date('2017-07-31 14:26:16 UTC'),
+              updated_at: new Date('2017-07-31 14:26:16 UTC'),
+            },
           ];
 
           expected.forEach((row, i) => {
@@ -178,7 +187,7 @@ suite(
               channel_id: 'C6E2XMLAV',
               raw_ts: '1501624043.643661',
               message_timestamp: new Date(1501624043.643661 * 1000),
-              message: 'This is a message. This is what I would send over slack in this channel.',
+              message: 'Nice work! We have 5 PRs and 3 trello tasks completed already today, Nice!',
             },
             {
               message_id: 2,
@@ -210,7 +219,7 @@ suite(
               channel_id: 'C6E2XMK4H',
               raw_ts: '1501628043.643661',
               message_timestamp: new Date(1501628043.643661 * 1000),
-              message: 'This is the last message I will add.',
+              message: "I've been in merge conflict hell all day.",
             },
           ];
 

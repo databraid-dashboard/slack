@@ -9,16 +9,11 @@ function getMessages() {
 
 function getMessagesByChannelName(channelName) {
   return knex('messages')
-    .select('message_id',
-      'user_id',
-      'messages.channel_id',
-      'raw_ts',
-      'message_timestamp',
-      'message')
-    .innerJoin('channels', 'channels.channel_id', 'messages.channel_id')
+    .innerJoin('channels', 'messages.channel_id', 'channels.channel_id')
+    .innerJoin('users', 'messages.user_id', 'users.user_id')
     .where('channel_name', channelName)
-    .then(result => camelizeKeys(result))
-    .catch(e => e);
+    .then(row => camelizeKeys(row))
+    .catch(err => err);
 }
 
 function updateMessage(channelId, message) {

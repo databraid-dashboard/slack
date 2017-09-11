@@ -1,6 +1,6 @@
 /* eslint-disable no-undef, no-unused-expressions */
 const expect = require('chai').expect;
-const { analyzeSentimentAndSaveScore } = require('../src/sentiment.js');
+const { analyzeSentimentAndSaveScore } = require('../src/slack/sentiment-event-handlers.js');
 
 describe('analyzeSentimentAndSaveScore', () => {
   it('should exist', () => {
