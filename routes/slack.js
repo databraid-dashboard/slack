@@ -1,9 +1,7 @@
 const express = require('express');
 const request = require('request');
-const { updateOption } = require('../repositories/option-repository');
-const { handleNewMessageEvent,
-  handleEditMessageEvent,
-  handleDeleteMessageEvent } = require('../src/slack/message-event-handlers');
+const { setOption } = require('../repositories/option-repository');
+const { handleNewMessageEvent } = require('../src/slack/message-event-handlers');
 const cors = require('cors');
 
 // eslint-disable-next-line new-cap
@@ -27,7 +25,7 @@ router.get('/auth/redirect', (req, res) => {
         .status(200)
         .end();
     } else {
-      updateOption('oauth_token', JSONresponse.access_token);
+      setOption('oauth_token', JSONresponse.access_token);
       res.redirect('/');
     }
   });
