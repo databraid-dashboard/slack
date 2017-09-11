@@ -1,5 +1,4 @@
 const knex = require('../knex.js');
-const { camelizeKeys } = require('humps');
 
 function getOption(name) {
   return knex('options')
@@ -12,7 +11,6 @@ function getOption(name) {
       }
       return result.option_value;
     })
-    .then(row => camelizeKeys(row))
     .catch(err => err);
 }
 
@@ -20,8 +18,7 @@ function setOption(name, value) {
   return knex('options')
     .where({ option_name: name })
     .del()
-    .then(() => knex('options').insert({ option_name: name, option_value: value }))
-    .then(row => camelizeKeys(row))
+    .then(() => knex('options').insert({ option_name: name, option_value: value }, '*'))
     .catch(err => err);
 }
 

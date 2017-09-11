@@ -19,7 +19,7 @@ describe(
     });
 
     it('should be a function', () => {
-      expect(setOption).is.a('function');
+      expect(setOption).to.be.a('function');
     });
   }),
 );
@@ -32,22 +32,18 @@ describe(
     });
 
     it('should be a function', () => {
-      expect(getOption).is.a('function');
+      expect(getOption).to.be.a('function');
     });
 
-    it('should return a string', () => {
-      getOption('oauth_token').then((result) => {
-        expect(result).to.be.a('string');
-      });
-    });
+    it('should return a string', () => getOption('oauth_token').then((result) => {
+      expect(result).to.be.a('string');
+    }));
 
-    it('should do a data round-trip', () => {
-      setOption('oauth_token', '987654321')
-        .then(() => getOption('oauth_token')
-          .then((result) => {
-            expect(result).to.equal('987654321');
-          }),
-        );
-    });
+    it('should do a data round-trip', () => setOption('oauth_token', '987654321')
+      .then(() => getOption('oauth_token'))
+      .then((result) => {
+        expect(result).to.equal('987654321');
+      }),
+    );
   }),
 );
