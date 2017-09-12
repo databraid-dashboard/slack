@@ -17,6 +17,7 @@ const channels = require('./routes/channels');
 const messages = require('./routes/messages');
 const sentiment = require('./routes/sentiment');
 const index = require('./routes/index');
+const health = require('./routes/health');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -28,6 +29,7 @@ app.use('/channels', channels);
 app.use('/messages', messages);
 app.use('/sentiment', sentiment);
 app.use('/', index);
+app.use('/health', health);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
