@@ -14,7 +14,13 @@
       "name": "slack-api",
       "image": "databraiddb/slack-api:latest",
       "cpu": 10,
-      "command": ["npm", "start"]
+      "command": ["npm", "start"],
+      "environment:" : [
+        {
+          "name": "NODE_ENV",
+          "value": "production"
+        }
+      ]
     }
   ],
   "family": "slack-api"
