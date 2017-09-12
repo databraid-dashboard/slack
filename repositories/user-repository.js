@@ -6,7 +6,9 @@ function getUsers() {
 }
 
 function getUserData(slackUserId) {
-  return knex('users').where('user_id', slackUserId).select('user_name');
+  return knex('users')
+    .where('user_id', slackUserId)
+    .select('user_name');
 }
 
 function addUserDataFromSlack(slackUserId, token) {
@@ -28,4 +30,14 @@ function addUserDataFromSlack(slackUserId, token) {
   }));
 }
 
-module.exports = { getUsers, getUserData, addUserDataFromSlack };
+function updateUser(slackUserId, userDetails) {
+  return knex('users')
+    .update(userDetails)
+    .where('user_id', slackUserId)
+    .catch(err => err);
+}
+
+module.exports = { getUsers,
+  getUserData,
+  addUserDataFromSlack,
+  updateUser };

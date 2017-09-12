@@ -10,7 +10,10 @@ after(() => {
 const expect = require('chai').expect;
 const nock = require('nock');
 const knex = require('../knex');
-const { getUsers, getUserData, addUserDataFromSlack } = require('../repositories/user-repository');
+const { getUsers,
+  getUserData,
+  addUserDataFromSlack,
+  updateUser } = require('../repositories/user-repository');
 const { addDatabaseHooks } = require('./utils');
 
 describe(
@@ -166,6 +169,42 @@ describe(
             .then((result) => {
               expect(result).to.deep.equal([{ user_name: 'johndoe' }]);
             }));
+    });
+  }),
+);
+
+describe(
+  'User Repo updateUser',
+  addDatabaseHooks(() => {
+    let userId = 'U6SPRFYLX';
+    const userDetails = { user_name: 'kurtishouser',
+      real_name: 'Dunder Dog',
+      first_name: 'Dunder',
+      last_name: 'Dog',
+      status_emoji: ':hankey:',
+      image_24: 'https://avatars.slack-edge.com/2017-09-12/239659401761_76f89c2470ff018b03dd_24.jpg',
+      image_512: 'https://avatars.slack-edge.com/2017-09-12/239659401761_76f89c2470ff018b03dd_512.jpg',
+    };
+
+    it('should exist', () => {
+      expect(updateUser).to.exist;
+    });
+
+    it('should be a function', () => {
+      expect(updateUser).is.a('function');
+    });
+
+    it('should return with status of 1 (update successful)', () => {
+      updateUser(userId, userDetails).then((result) => {
+        expect(result).to.equal(1);
+      });
+    });
+
+    it('should return with status of 0 (update failed)', () => {
+      userId = 'ABC123DEF';
+      updateUser(userId, userDetails).then((result) => {
+        expect(result).to.equal(0);
+      });
     });
   }),
 );

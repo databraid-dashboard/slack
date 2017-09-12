@@ -3,7 +3,8 @@ const request = require('request');
 const { updateOption } = require('../repositories/option-repository');
 const { handleNewMessageEvent,
   handleEditMessageEvent,
-  handleDeleteMessageEvent } = require('../src/slack/message-event-handlers');
+  handleDeleteMessageEvent,
+  handleEditUserEvent } = require('../src/slack/message-event-handlers');
 const cors = require('cors');
 
 // eslint-disable-next-line new-cap
@@ -59,6 +60,10 @@ function setEvents(io) {
         }
         // message posted
         handleNewMessageEvent(io, req);
+        break;
+
+      case 'user_change':
+        handleEditUserEvent(req);
         break;
 
       default:
