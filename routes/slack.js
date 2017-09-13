@@ -1,7 +1,9 @@
 const express = require('express');
 const request = require('request');
 const { setOption } = require('../repositories/option-repository');
-const { handleNewMessageEvent } = require('../src/slack/message-event-handlers');
+const { handleNewMessageEvent,
+  handleEditMessageEvent,
+  handleDeleteMessageEvent } = require('../src/slack/message-event-handlers');
 const cors = require('cors');
 
 // eslint-disable-next-line new-cap
