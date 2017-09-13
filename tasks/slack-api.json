@@ -15,7 +15,7 @@
       "image": "databraiddb/slack-api:latest",
       "cpu": 10,
       "command": ["npm", "start"],
-      "environment:" : [
+      "environment" : [
         {
           "name": "NODE_ENV",
           "value": "production"
