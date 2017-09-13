@@ -1,13 +1,9 @@
-if (process.env.NODE_ENV !== 'production') {
-  /* eslint-disable global-require */
-  require('dotenv').config();
-}
-
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const socket = require('socket.io');
 const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 8000;
