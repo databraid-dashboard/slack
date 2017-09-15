@@ -2,6 +2,7 @@ const express = require('express');
 const request = require('request');
 const { setOption } = require('../repositories/option-repository');
 const { updateAllUserData } = require('../repositories/user-repository.js');
+const { updateAllChannelData } = require('../repositories/channel-repository');
 const { handleNewMessageEvent,
   handleEditMessageEvent,
   handleDeleteMessageEvent,
@@ -31,6 +32,7 @@ router.get('/auth/redirect', (req, res) => {
     } else {
       setOption('oauth_token', JSONresponse.access_token);
       updateAllUserData(JSONresponse.access_token);
+      updateAllChannelData(JSONresponse.access_token);
       res.redirect('/');
     }
   });
