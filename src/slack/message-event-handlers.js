@@ -1,6 +1,6 @@
 const { writeMessage, buildWidgetMessage } = require('../../repositories/event-repository');
 const { updateMessage, deleteMessage } = require('../../repositories/message-repository');
-const { updateUser } = require('../../repositories/user-repository');
+const { updateUser, addUser } = require('../../repositories/user-repository');
 const { analyzeSentimentAndSaveScore } = require('./sentiment-event-handlers');
 
 function handleNewMessageEvent(io, req) {
@@ -40,6 +40,20 @@ function handleDeleteMessageEvent(req) {
   return deleteMessage(channel, deleted_ts);
 }
 
+function handleUserJoinedTeamEvent(req) {
+  const { user } = req.body.event;
+
+  const userDetails = {
+    user_id: user.id,
+    user_name: user.name,
+    real_name: user.real_name,
+    image_24: user.profile.image_24,
+    image_512: user.profile.image_512,
+  };
+
+  return addUser(userDetails);
+}
+
 function handleEditUserEvent(req) {
   const { user } = req.body.event;
 
@@ -60,4 +74,5 @@ function handleEditUserEvent(req) {
 module.exports = { handleNewMessageEvent,
   handleEditMessageEvent,
   handleDeleteMessageEvent,
+  handleUserJoinedTeamEvent,
   handleEditUserEvent };

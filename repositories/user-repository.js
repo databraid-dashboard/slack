@@ -30,6 +30,12 @@ function addUserDataFromSlack(slackUserId, token) {
   }));
 }
 
+function addUser(userDetails) {
+  return knex('users')
+    .insert(userDetails)
+    .catch(err => err);
+}
+
 function updateUser(slackUserId, userDetails) {
   return knex('users')
     .update(userDetails)
@@ -40,4 +46,5 @@ function updateUser(slackUserId, userDetails) {
 module.exports = { getUsers,
   getUserData,
   addUserDataFromSlack,
+  addUser,
   updateUser };

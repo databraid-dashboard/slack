@@ -4,7 +4,8 @@ const { setOption } = require('../repositories/option-repository');
 const { handleNewMessageEvent,
   handleEditMessageEvent,
   handleDeleteMessageEvent,
-  handleEditUserEvent } = require('../src/slack/message-event-handlers');
+  handleEditUserEvent,
+  handleUserJoinedTeamEvent } = require('../src/slack/message-event-handlers');
 const cors = require('cors');
 
 // eslint-disable-next-line new-cap
@@ -48,22 +49,21 @@ function setEvents(io) {
     const { type, subtype } = req.body.event;
     switch (type) {
       case 'message':
-        // message edited
-        if (subtype === 'message_changed') {
+        if (!subtype) { // message posted
+          handleNewMessageEvent(io, req);
+        } else if (subtype === 'message_changed') { // message edited
           handleEditMessageEvent(req);
-          break;
-        }
-        // message deleted
-        if (subtype === 'message_deleted') {
+        } else if (subtype === 'message_deleted') { // message deleted
           handleDeleteMessageEvent(req);
-          break;
         }
-        // message posted
-        handleNewMessageEvent(io, req);
         break;
 
       case 'user_change':
         handleEditUserEvent(req);
+        break;
+
+      case 'team_join':
+        handleUserJoinedTeamEvent(req);
         break;
 
       default:
