@@ -58,7 +58,7 @@ function updateAllUserData(token) {
       });
       return Promise.all(queries);
     }),
-  );
+  ).catch(err => new Error(err));
 }
 
 function updateUser(slackUserId, userDetails) {
@@ -73,4 +73,3 @@ module.exports = { getUsers,
   addUserDataFromSlack,
   updateUser,
   updateAllUserData };
-

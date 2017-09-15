@@ -301,5 +301,23 @@ describe(
             });
         });
     });
+
+    it('should handle errors when getting user data', () => {
+      nock('https://slack.com')
+        .get('/api/users.list')
+        .query({
+          token: 'xoxp-218630306018-230609873190-230462324853-fc311e59fb6a01910e5012ba22caf130',
+        })
+        .reply(200, {
+          error: 'invalid_auth',
+          ok: false,
+        });
+
+      const token = 'xoxp-218630306018-230609873190-230462324853-fc311e59fb6a01910e5012ba22caf130';
+      updateAllUserData(token)
+        .then((result) => {
+          expect(result).to.be.an('error');
+        });
+    });
   }),
 );
