@@ -46,30 +46,34 @@ function setEvents(io) {
   // This gets hit after a message is sent inside the literal slack app
   // and picked up by the slack 'app' (https://api.slack.com/apps/Databraid_Slack_App)
   router.post('/events', (req, res) => {
-    const { type, subtype } = req.body.event;
-    switch (type) {
-      case 'message':
-        if (!subtype) { // message posted
-          handleNewMessageEvent(io, req);
-        } else if (subtype === 'message_changed') { // message edited
-          handleEditMessageEvent(req);
-        } else if (subtype === 'message_deleted') { // message deleted
-          handleDeleteMessageEvent(req);
-        }
-        break;
+    if (req.body.token === process.env.SLACK_VERIFICATION_TOKEN) {
+      const { type, subtype } = req.body.event;
+      switch (type) {
+        case 'message':
+          if (!subtype) { // message posted
+            handleNewMessageEvent(io, req);
+          } else if (subtype === 'message_changed') { // message edited
+            handleEditMessageEvent(req);
+          } else if (subtype === 'message_deleted') { // message deleted
+            handleDeleteMessageEvent(req);
+          }
+          break;
 
-      case 'user_change':
-        handleEditUserEvent(req);
-        break;
+        case 'user_change':
+          handleEditUserEvent(req);
+          break;
 
-      case 'team_join':
-        handleUserJoinedTeamEvent(req);
-        break;
+        case 'team_join':
+          handleUserJoinedTeamEvent(req);
+          break;
 
-      default:
-      // for now, ignore any messages not handled by the case conditions
+        default:
+        // for now, ignore any messages not handled by the case conditions
+      }
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(403);
     }
-    res.sendStatus(200);
   });
 }
 
