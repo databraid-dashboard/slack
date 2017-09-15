@@ -13,7 +13,8 @@ const knex = require('../knex');
 const { getUsers,
   getUserData,
   addUserDataFromSlack,
-  updateUser } = require('../repositories/user-repository');
+  updateUser,
+  updateAllUserData } = require('../repositories/user-repository');
 const { addDatabaseHooks } = require('./utils');
 
 describe(
@@ -128,7 +129,7 @@ describe(
 );
 
 describe(
-  'User Repo addUserDataFromSlack (all users)',
+  'User Repo addUserDataFromSlack (one user)',
   addDatabaseHooks(() => {
     it('should exist', () => {
       expect(addUserDataFromSlack).to.exist;
@@ -205,6 +206,118 @@ describe(
       updateUser(userId, userDetails).then((result) => {
         expect(result).to.equal(0);
       });
+    });
+  }),
+);
+
+describe(
+  'User Repo updateAllUserData (get all users from Slack)',
+  addDatabaseHooks(() => {
+    it('should exist', () => {
+      expect(updateAllUserData).to.exist;
+    });
+
+    it('should be a function', () => {
+      expect(updateAllUserData).is.a('function');
+    });
+
+    it('should update existing user data and add missing user data', () => {
+      nock('https://slack.com')
+        .get('/api/users.list')
+        .query({
+          token: 'xoxp-218630306018-230609873190-230462324853-fc311e59fb6a01910e5012ba22caf129',
+        })
+        .reply(200, {
+          ok: true,
+          members: [
+            {
+              id: 'U6SHV2R5L',
+              team_id: 'T6EJM120J',
+              name: 'johanbmk',
+              deleted: false,
+              real_name: 'Johan Brattemark',
+              profile: {
+                first_name: 'Johan',
+                last_name: 'bmk',
+                real_name: 'Johan Brattemark',
+                display_name: 'johanbmk',
+                real_name_normalized: 'Johan Brattemark',
+                display_name_normalized: 'johanbmk',
+                image_24: 'https://secure.gravatar.com/avatar/1234.jpg',
+                image_512: 'https://secure.gravatar.com/avatar/5678.jpg',
+              },
+            },
+            {
+              id: 'U6JHU2R5L',
+              team_id: 'T6EJM120J',
+              name: 'fzappa',
+              deleted: false,
+              real_name: 'Frank Zappa',
+              profile: {
+                first_name: 'Frank',
+                last_name: 'Zappa',
+                real_name: 'Frank Zappa',
+                display_name: 'fzappa',
+                real_name_normalized: 'Frank Zappa',
+                display_name_normalized: 'fzappa',
+                image_24: 'https://secure.gravatar.com/avatar/9fe67a2852c0fff.jpg',
+                image_512: 'https://secure.gravatar.com/avatar/9ee4ea282c0fff.jpg',
+              },
+            },
+            {
+              id: 'U6ZU12JE6',
+              team_id: 'T6EJM120J',
+              name: 'billy',
+              deleted: false,
+              real_name: 'Billy Gibbons',
+              profile: {
+                first_name: 'Billy',
+                last_name: 'Gibbons',
+                real_name: 'Billy Gibbons',
+                display_name: 'billy',
+                real_name_normalized: 'Billy Gibbons',
+                display_name_normalized: 'billy',
+                image_24: 'https://secure.gravatar.com/avatar/b0c84ffc457e13a.jpg',
+                image_512: 'https://secure.gravatar.com/avatar/5ab01ff57ed13a.jpg',
+                team: 'T6EJM120J',
+              },
+            },
+          ],
+          cache_ts: 1505252042,
+        });
+
+      const token = 'xoxp-218630306018-230609873190-230462324853-fc311e59fb6a01910e5012ba22caf129';
+      updateAllUserData(token)
+        .then(() => {
+          knex('users').where({ user_id: 'U6SHV2R5L' }).select('last_name')
+            .then((result) => {
+              expect(result).to.deep.equal([{ last_name: 'bmk' }]);
+            });
+        })
+        .then(() => {
+          knex('users').where({ user_id: 'U6ZU12JE6' }).select('first_name')
+            .then((result) => {
+              expect(result).to.deep.equal([{ first_name: 'Billy' }]);
+            });
+        });
+    });
+
+    it('should handle errors when getting user data', () => {
+      nock('https://slack.com')
+        .get('/api/users.list')
+        .query({
+          token: 'xoxp-218630306018-230609873190-230462324853-fc311e59fb6a01910e5012ba22caf130',
+        })
+        .reply(200, {
+          error: 'invalid_auth',
+          ok: false,
+        });
+
+      const token = 'xoxp-218630306018-230609873190-230462324853-fc311e59fb6a01910e5012ba22caf130';
+      updateAllUserData(token)
+        .then((result) => {
+          expect(result).to.be.an('error');
+        });
     });
   }),
 );
