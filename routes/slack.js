@@ -47,21 +47,21 @@ function setEvents(io) {
   // and picked up by the slack 'app' (https://api.slack.com/apps/Databraid_Slack_App)
   router.post('/events', (req, res) => {
     if (req.body.token === process.env.SLACK_VERIFICATION_TOKEN) {
-      const { type, subtype } = req.body.event;
       const { event } = req.body;
-      switch (type) {
+
+      switch (event.type) {
         case 'message':
-          if (!subtype) { // message posted
-            handleNewMessageEvent(io, req);
-          } else if (subtype === 'message_changed') { // message edited
-            handleEditMessageEvent(req);
-          } else if (subtype === 'message_deleted') { // message deleted
-            handleDeleteMessageEvent(req);
+          if (!event.subtype) { // message posted
+            handleNewMessageEvent(io, event);
+          } else if (event.subtype === 'message_changed') { // message edited
+            handleEditMessageEvent(event);
+          } else if (event.subtype === 'message_deleted') { // message deleted
+            handleDeleteMessageEvent(event);
           }
           break;
 
         case 'user_change':
-          handleEditUserEvent(req);
+          handleEditUserEvent(event);
           break;
 
         case 'team_join':

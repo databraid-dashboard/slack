@@ -3,8 +3,8 @@ const { updateMessage, deleteMessage } = require('../../repositories/message-rep
 const { updateUser, addUser } = require('../../repositories/user-repository');
 const { analyzeSentimentAndSaveScore } = require('./sentiment-event-handlers');
 
-function handleNewMessageEvent(io, req) {
-  const { user, text, ts, channel } = req.body.event;
+function handleNewMessageEvent(io, event) {
+  const { user, text, ts, channel } = event;
 
   return writeMessage(user, text, ts, channel)
     .then(result => buildWidgetMessage(result[0]))
@@ -28,16 +28,16 @@ function handleNewMessageEvent(io, req) {
     });
 }
 
-function handleEditMessageEvent(req) {
-  const { channel, message } = req.body.event;
+function handleEditMessageEvent(event) {
+  const { channel, message } = event;
 
-  return updateMessage(channel, message);
+  updateMessage(channel, message);
 }
 
-function handleDeleteMessageEvent(req) {
-  const { channel, deleted_ts } = req.body.event;
+function handleDeleteMessageEvent(event) {
+  const { channel, deleted_ts } = event;
 
-  return deleteMessage(channel, deleted_ts);
+  deleteMessage(channel, deleted_ts);
 }
 
 function handleUserJoinedTeamEvent(event) {
@@ -54,8 +54,8 @@ function handleUserJoinedTeamEvent(event) {
   addUser(userDetails);
 }
 
-function handleEditUserEvent(req) {
-  const { user } = req.body.event;
+function handleEditUserEvent(event) {
+  const { user } = event;
 
   const userId = user.id;
   const userDetails = {
@@ -68,7 +68,7 @@ function handleEditUserEvent(req) {
     image_512: user.profile.image_512,
   };
 
-  return updateUser(userId, userDetails);
+  updateUser(userId, userDetails);
 }
 
 module.exports = { handleNewMessageEvent,
