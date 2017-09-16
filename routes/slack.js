@@ -48,6 +48,7 @@ function setEvents(io) {
   router.post('/events', (req, res) => {
     if (req.body.token === process.env.SLACK_VERIFICATION_TOKEN) {
       const { type, subtype } = req.body.event;
+      const { event } = req.body;
       switch (type) {
         case 'message':
           if (!subtype) { // message posted
@@ -64,7 +65,8 @@ function setEvents(io) {
           break;
 
         case 'team_join':
-          handleUserJoinedTeamEvent(req);
+
+          handleUserJoinedTeamEvent(event);
           break;
 
         default:

@@ -40,8 +40,8 @@ function handleDeleteMessageEvent(req) {
   return deleteMessage(channel, deleted_ts);
 }
 
-function handleUserJoinedTeamEvent(req) {
-  const { user } = req.body.event;
+function handleUserJoinedTeamEvent(event) {
+  const { user } = event;
 
   const userDetails = {
     user_id: user.id,
@@ -51,7 +51,7 @@ function handleUserJoinedTeamEvent(req) {
     image_512: user.profile.image_512,
   };
 
-  return addUser(userDetails);
+  addUser(userDetails);
 }
 
 function handleEditUserEvent(req) {
