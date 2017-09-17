@@ -14,7 +14,7 @@ const { handleNewMessageEvent,
   handleUserJoinedTeamEvent,
   handleEditUserEvent } = require('../src/slack/message-event-handlers');
 
-describe.only('Slack message event handlers', () => {
+describe('Slack message event handlers', () => {
   describe('handleNewMessageEvent()', () => {
     it('should be a function', () => {
       expect(handleNewMessageEvent).is.a('function');
