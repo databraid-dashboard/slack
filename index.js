@@ -3,8 +3,6 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const socket = require('socket.io');
 const cors = require('cors');
-// const createSlackEventAdapter = require('@slack/events-api').createSlackEventAdapter;
-// const slackEvents = createSlackEventAdapter('G2pDe5kP7UQwQvlSuoN4pI99');
 require('dotenv').config();
 
 
@@ -24,11 +22,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/slack', slack.router);
-// app.use('/slack/events', (req,res,next)=>{
-//   res.set({'Content-Type': 'text/plain'});
-//   res.status(200).send(req.body.challenge);
-// });
-// app.use('/slack/events', slackEvents.expressMiddleware());
 app.use('/channels', channels);
 app.use('/messages', messages);
 app.use('/sentiment', sentiment);
