@@ -53,6 +53,7 @@ function setEvents(io) {
     if (req.body.type && req.body.type === 'url_verification') {
       res.set({ 'Content-Type': 'text/plain' });
       res.status(200).send(req.body.challenge);
+      return;
     }
     const { type, subtype } = req.body.event;
     switch (type) {
