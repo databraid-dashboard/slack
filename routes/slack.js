@@ -50,10 +50,14 @@ function setEvents(io, slackEvents) {
   // and picked up by the slack 'app' (https://api.slack.com/apps/Databraid_Slack_App)
 
   router.post('/events', (req, res, next) => {
-    console.log('req',req.body);
-    const { type, subtype } = req.body.event;
+    if(req.body.type && req.body.type === 'url_verification'){
+      res.set({'Content-Type': 'text/plain'});
+      res.status(200).send(req.body.challenge);
+    }
+    const { type } = req.body.event;
     switch (type) {
       case 'message':
+        const { supbtype } = req.body.event;
         // message edited
         if (subtype === 'message_changed') {
           handleEditMessageEvent(req);
@@ -75,11 +79,8 @@ function setEvents(io, slackEvents) {
       default:
       // for now, ignore any messages not handled by the case conditions
     }
-    next();
-    // res.sendStatus(200);
+    res.sendStatus(200);
   });
-
-  router.post('/events', slackEvents.expressMiddleware());
 
 }
 
