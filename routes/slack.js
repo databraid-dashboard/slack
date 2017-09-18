@@ -45,19 +45,18 @@ router.get('/auth', (req, res) => {
   return res.send(buttonHTML);
 });
 
-function setEvents(io, slackEvents) {
+function setEvents(io) {
   // This gets hit after a message is sent inside the literal slack app
   // and picked up by the slack 'app' (https://api.slack.com/apps/Databraid_Slack_App)
 
-  router.post('/events', (req, res, next) => {
-    if(req.body.type && req.body.type === 'url_verification'){
-      res.set({'Content-Type': 'text/plain'});
+  router.post('/events', (req, res) => {
+    if (req.body.type && req.body.type === 'url_verification') {
+      res.set({ 'Content-Type': 'text/plain' });
       res.status(200).send(req.body.challenge);
     }
-    const { type } = req.body.event;
+    const { type, subtype } = req.body.event;
     switch (type) {
       case 'message':
-        const { supbtype } = req.body.event;
         // message edited
         if (subtype === 'message_changed') {
           handleEditMessageEvent(req);
@@ -81,7 +80,6 @@ function setEvents(io, slackEvents) {
     }
     res.sendStatus(200);
   });
-
 }
 
 module.exports = { router, setEvents };
