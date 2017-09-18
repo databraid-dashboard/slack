@@ -1,6 +1,8 @@
 const express = require('express');
 const request = require('request');
 const { setOption } = require('../repositories/option-repository');
+const { updateAllUserData } = require('../repositories/user-repository.js');
+const { updateAllChannelData } = require('../repositories/channel-repository');
 const { handleNewMessageEvent,
   handleEditMessageEvent,
   handleDeleteMessageEvent,
@@ -30,6 +32,8 @@ router.get('/auth/redirect', (req, res) => {
         .end();
     } else {
       setOption('oauth_token', JSONresponse.access_token);
+      updateAllUserData(JSONresponse.access_token);
+      updateAllChannelData(JSONresponse.access_token);
       res.redirect('/');
     }
   });
@@ -45,7 +49,14 @@ router.get('/auth', (req, res) => {
 function setEvents(io) {
   // This gets hit after a message is sent inside the literal slack app
   // and picked up by the slack 'app' (https://api.slack.com/apps/Databraid_Slack_App)
+
   router.post('/events', (req, res) => {
+    if (req.body.type && req.body.type === 'url_verification') {
+      res.set({ 'Content-Type': 'text/plain' });
+      res.status(200).send(req.body.challenge);
+      return;
+    }
+
     if (req.body.token === process.env.SLACK_VERIFICATION_TOKEN) {
       const { event } = req.body;
 
@@ -65,7 +76,6 @@ function setEvents(io) {
           break;
 
         case 'team_join':
-
           handleUserJoinedTeamEvent(event);
           break;
 
