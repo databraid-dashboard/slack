@@ -45,10 +45,12 @@ router.get('/auth', (req, res) => {
   return res.send(buttonHTML);
 });
 
-function setEvents(io) {
+function setEvents(io, slackEvents) {
   // This gets hit after a message is sent inside the literal slack app
   // and picked up by the slack 'app' (https://api.slack.com/apps/Databraid_Slack_App)
-  router.post('/events', (req, res) => {
+
+  router.post('/events', (req, res, next) => {
+    console.log('req',req.body);
     const { type, subtype } = req.body.event;
     switch (type) {
       case 'message':
@@ -73,8 +75,12 @@ function setEvents(io) {
       default:
       // for now, ignore any messages not handled by the case conditions
     }
-    res.sendStatus(200);
+    next();
+    // res.sendStatus(200);
   });
+
+  router.post('/events', slackEvents.expressMiddleware());
+
 }
 
 module.exports = { router, setEvents };
