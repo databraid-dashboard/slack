@@ -13,6 +13,7 @@ const knex = require('../knex');
 const { getUsers,
   getUserData,
   addUserDataFromSlack,
+  addUser,
   updateUser,
   updateAllUserData } = require('../repositories/user-repository');
 const { addDatabaseHooks } = require('./utils');
@@ -175,10 +176,40 @@ describe(
 );
 
 describe(
+  'User Repo addUser',
+  addDatabaseHooks(() => {
+    const userDetails = {
+      user_id: 'N1NINCHNLZ',
+      user_name: 'trentreznor',
+      real_name: 'Trent Reznor',
+      image_24:
+        'https://secure.gravatar.com/avatar/bffb6bb05942ed7400905f9ceb0f6cdf.jpg?s=24&d=https%3A%2F%2Fa.slack-edge.com%2F66f9%2Fimg%2Favatars%2Fava_0011-24.png',
+      image_512:
+        'https://secure.gravatar.com/avatar/bffb6bb05942ed7400905f9ceb0f6cdf.jpg?s=512&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0011-512.png',
+    };
+
+    it('should exist', () => {
+      expect(addUser).to.exist;
+    });
+
+    it('should be a function', () => {
+      expect(addUser).is.a('function');
+    });
+
+    it('should return with rowCount of 1 (insert successful)', () => {
+      addUser(userDetails).then((result) => {
+        expect(result.rowCount).to.equal(1);
+      });
+    });
+  }),
+);
+
+describe(
   'User Repo updateUser',
   addDatabaseHooks(() => {
     let userId = 'U6SPRFYLX';
-    const userDetails = { user_name: 'kurtishouser',
+    const userDetails = {
+      user_name: 'kurtishouser',
       real_name: 'Dunder Dog',
       first_name: 'Dunder',
       last_name: 'Dog',

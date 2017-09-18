@@ -30,6 +30,19 @@ function addUserDataFromSlack(slackUserId, token) {
   }));
 }
 
+function addUser(userDetails) {
+  return knex('users')
+    .insert(userDetails)
+    .catch(err => err);
+}
+
+function updateUser(slackUserId, userDetails) {
+  return knex('users')
+    .update(userDetails)
+    .where('user_id', slackUserId)
+    .catch(err => err);
+}
+
 function updateAllUserData(token) {
   const options = {
     method: 'GET',
@@ -61,15 +74,10 @@ function updateAllUserData(token) {
   ).catch(err => new Error(err));
 }
 
-function updateUser(slackUserId, userDetails) {
-  return knex('users')
-    .update(userDetails)
-    .where('user_id', slackUserId)
-    .catch(err => err);
-}
-
 module.exports = { getUsers,
   getUserData,
   addUserDataFromSlack,
+  addUser,
   updateUser,
-  updateAllUserData };
+  updateAllUserData,
+};

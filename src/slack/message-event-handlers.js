@@ -1,10 +1,10 @@
 const { writeMessage, buildWidgetMessage } = require('../../repositories/event-repository');
 const { updateMessage, deleteMessage } = require('../../repositories/message-repository');
-const { updateUser } = require('../../repositories/user-repository');
+const { updateUser, addUser } = require('../../repositories/user-repository');
 const { analyzeSentimentAndSaveScore } = require('./sentiment-event-handlers');
 
-function handleNewMessageEvent(io, req) {
-  const { user, text, ts, channel } = req.body.event;
+function handleNewMessageEvent(io, event) {
+  const { user, text, ts, channel } = event;
 
   return writeMessage(user, text, ts, channel)
     .then(result => buildWidgetMessage(result[0]))
@@ -28,20 +28,34 @@ function handleNewMessageEvent(io, req) {
     });
 }
 
-function handleEditMessageEvent(req) {
-  const { channel, message } = req.body.event;
+function handleEditMessageEvent(event) {
+  const { channel, message } = event;
 
-  return updateMessage(channel, message);
+  updateMessage(channel, message);
 }
 
-function handleDeleteMessageEvent(req) {
-  const { channel, deleted_ts } = req.body.event;
+function handleDeleteMessageEvent(event) {
+  const { channel, deleted_ts } = event;
 
-  return deleteMessage(channel, deleted_ts);
+  deleteMessage(channel, deleted_ts);
 }
 
-function handleEditUserEvent(req) {
-  const { user } = req.body.event;
+function handleUserJoinedTeamEvent(event) {
+  const { user } = event;
+
+  const userDetails = {
+    user_id: user.id,
+    user_name: user.name,
+    real_name: user.real_name,
+    image_24: user.profile.image_24,
+    image_512: user.profile.image_512,
+  };
+
+  addUser(userDetails);
+}
+
+function handleEditUserEvent(event) {
+  const { user } = event;
 
   const userId = user.id;
   const userDetails = {
@@ -54,10 +68,11 @@ function handleEditUserEvent(req) {
     image_512: user.profile.image_512,
   };
 
-  return updateUser(userId, userDetails);
+  updateUser(userId, userDetails);
 }
 
 module.exports = { handleNewMessageEvent,
   handleEditMessageEvent,
   handleDeleteMessageEvent,
+  handleUserJoinedTeamEvent,
   handleEditUserEvent };

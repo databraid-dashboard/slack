@@ -6,7 +6,8 @@ const { updateAllChannelData } = require('../repositories/channel-repository');
 const { handleNewMessageEvent,
   handleEditMessageEvent,
   handleDeleteMessageEvent,
-  handleEditUserEvent } = require('../src/slack/message-event-handlers');
+  handleEditUserEvent,
+  handleUserJoinedTeamEvent } = require('../src/slack/message-event-handlers');
 const cors = require('cors');
 
 // eslint-disable-next-line new-cap
@@ -55,31 +56,36 @@ function setEvents(io) {
       res.status(200).send(req.body.challenge);
       return;
     }
-    const { type, subtype } = req.body.event;
-    switch (type) {
-      case 'message':
-        // message edited
-        if (subtype === 'message_changed') {
-          handleEditMessageEvent(req);
-          break;
-        }
-        // message deleted
-        if (subtype === 'message_deleted') {
-          handleDeleteMessageEvent(req);
-          break;
-        }
-        // message posted
-        handleNewMessageEvent(io, req);
-        break;
 
-      case 'user_change':
-        handleEditUserEvent(req);
-        break;
+    if (req.body.token === process.env.SLACK_VERIFICATION_TOKEN) {
+      const { event } = req.body;
 
-      default:
-      // for now, ignore any messages not handled by the case conditions
+      switch (event.type) {
+        case 'message':
+          if (!event.subtype) { // message posted
+            handleNewMessageEvent(io, event);
+          } else if (event.subtype === 'message_changed') { // message edited
+            handleEditMessageEvent(event);
+          } else if (event.subtype === 'message_deleted') { // message deleted
+            handleDeleteMessageEvent(event);
+          }
+          break;
+
+        case 'user_change':
+          handleEditUserEvent(event);
+          break;
+
+        case 'team_join':
+          handleUserJoinedTeamEvent(event);
+          break;
+
+        default:
+        // for now, ignore any messages not handled by the case conditions
+      }
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(403);
     }
-    res.sendStatus(200);
   });
 }
 
