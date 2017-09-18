@@ -48,7 +48,13 @@ router.get('/auth', (req, res) => {
 function setEvents(io) {
   // This gets hit after a message is sent inside the literal slack app
   // and picked up by the slack 'app' (https://api.slack.com/apps/Databraid_Slack_App)
+
   router.post('/events', (req, res) => {
+    if (req.body.type && req.body.type === 'url_verification') {
+      res.set({ 'Content-Type': 'text/plain' });
+      res.status(200).send(req.body.challenge);
+      return;
+    }
     const { type, subtype } = req.body.event;
     switch (type) {
       case 'message':

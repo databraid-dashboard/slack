@@ -6,6 +6,7 @@ services:
     build: .
     volumes:
       - .:/app
+      - /app/node_modules
     command: sh -c "sleep 6 && npm run dev"
     ports:
       - 8001:8001
