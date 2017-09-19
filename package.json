@@ -31,7 +31,6 @@
     "grpc": "1.4.1",
     "humps": "2.0.1",
     "knex": "0.13.0",
-    "nock": "9.0.14",
     "nodemon": "1.11.0",
     "pg": "6.4.0",
     "protobufjs": "6.8.0",
@@ -43,6 +42,8 @@
     "@slack/events-api": "1.0.1",
     "chai": "4.1.0",
     "mocha": "3.4.2",
+    "nock": "9.0.14",
+    "proxyquire": "1.8.0",
     "sinon": "3.2.1",
     "supertest": "3.0.0"
   }
