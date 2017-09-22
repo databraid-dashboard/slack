@@ -1,11 +1,16 @@
+if (process.env.NODE_ENV !== 'production') {
+  /* eslint-disable global-require */
+  require('dotenv').config();
+}
+
 const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
 const bodyParser = require('body-parser');
 const socket = require('socket.io');
 const cors = require('cors');
-require('dotenv').config();
 
+require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -18,6 +23,7 @@ const index = require('./routes/index');
 const health = require('./routes/health');
 
 app.use(morgan('combined'));
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
