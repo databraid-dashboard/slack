@@ -1,6 +1,6 @@
 const express = require('express');
 const request = require('request');
-const { setOption } = require('../repositories/option-repository');
+const { getOption, setOption } = require('../repositories/option-repository');
 const { updateAllUserData } = require('../repositories/user-repository.js');
 const { updateAllChannelData } = require('../repositories/channel-repository');
 const { handleNewMessageEvent,
@@ -46,6 +46,22 @@ router.get('/auth', (req, res) => {
   return res.send(buttonHTML);
 });
 
+router.get('/token', (req, res) => {
+  getOption('oauth_token')
+    .then((token) => {
+      if (!token) {
+        return res
+          .status(200)
+          .set('Content-Type', 'application/json')
+          .send(false);
+      }
+      return res
+        .status(200)
+        .set('Content-Type', 'application/json')
+        .send(true);
+    });
+});
+
 function setEvents(io) {
   // This gets hit after a message is sent inside the literal slack app
   // and picked up by the slack 'app' (https://api.slack.com/apps/Databraid_Slack_App)
@@ -59,7 +75,6 @@ function setEvents(io) {
 
     if (req.body.token === process.env.SLACK_VERIFICATION_TOKEN) {
       const { event } = req.body;
-
       switch (event.type) {
         case 'message':
           if (!event.subtype) { // message posted
