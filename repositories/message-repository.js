@@ -16,4 +16,21 @@ function getMessagesByChannelName(channelName) {
     .catch(err => err);
 }
 
-module.exports = { getMessages, getMessagesByChannelName };
+function updateMessage(channelId, message) {
+  return knex('messages')
+    .where({ channel_id: channelId, raw_ts: message.ts })
+    .update({ message: message.text })
+    .catch(e => e);
+}
+
+function deleteMessage(channelId, timestamp) {
+  return knex('messages')
+    .where({ channel_id: channelId, raw_ts: timestamp })
+    .del()
+    .catch(e => e);
+}
+
+module.exports = { getMessages,
+  getMessagesByChannelName,
+  updateMessage,
+  deleteMessage };

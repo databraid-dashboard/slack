@@ -1,7 +1,13 @@
 const express = require('express');
 const request = require('request');
-const { updateOption } = require('../repositories/option-repository');
-const { handleNewMessageEvent } = require('../src/slack/message-event-handlers');
+const { setOption } = require('../repositories/option-repository');
+const { updateAllUserData } = require('../repositories/user-repository.js');
+const { updateAllChannelData } = require('../repositories/channel-repository');
+const { handleNewMessageEvent,
+  handleEditMessageEvent,
+  handleDeleteMessageEvent,
+  handleEditUserEvent,
+  handleUserJoinedTeamEvent } = require('../src/slack/message-event-handlers');
 const cors = require('cors');
 
 // eslint-disable-next-line new-cap
@@ -25,7 +31,9 @@ router.get('/auth/redirect', (req, res) => {
         .status(200)
         .end();
     } else {
-      updateOption('oauth_token', JSONresponse.access_token);
+      setOption('oauth_token', JSONresponse.access_token);
+      updateAllUserData(JSONresponse.access_token);
+      updateAllChannelData(JSONresponse.access_token);
       res.redirect('/');
     }
   });
@@ -41,26 +49,43 @@ router.get('/auth', (req, res) => {
 function setEvents(io) {
   // This gets hit after a message is sent inside the literal slack app
   // and picked up by the slack 'app' (https://api.slack.com/apps/Databraid_Slack_App)
-  router.post('/events', (req, res) => {
-    const { type, subtype } = req.body.event;
-    switch (type) {
-      case 'message':
-        // message edited
-        if (subtype === 'message_changed') {
-          break;
-        }
-        // message deleted
-        if (subtype === 'message_deleted') {
-          break;
-        }
-        // message posted
-        handleNewMessageEvent(io, req);
-        break;
 
-      default:
-      // for now, ignore any messages not handled by the case conditions
+  router.post('/events', (req, res) => {
+    if (req.body.type && req.body.type === 'url_verification') {
+      res.set({ 'Content-Type': 'text/plain' });
+      res.status(200).send(req.body.challenge);
+      return;
     }
-    res.sendStatus(200);
+
+    if (req.body.token === process.env.SLACK_VERIFICATION_TOKEN) {
+      const { event } = req.body;
+
+      switch (event.type) {
+        case 'message':
+          if (!event.subtype) { // message posted
+            handleNewMessageEvent(io, event);
+          } else if (event.subtype === 'message_changed') { // message edited
+            handleEditMessageEvent(event);
+          } else if (event.subtype === 'message_deleted') { // message deleted
+            handleDeleteMessageEvent(event);
+          }
+          break;
+
+        case 'user_change':
+          handleEditUserEvent(event);
+          break;
+
+        case 'team_join':
+          handleUserJoinedTeamEvent(event);
+          break;
+
+        default:
+        // for now, ignore any messages not handled by the case conditions
+      }
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(403);
+    }
   });
 }
 

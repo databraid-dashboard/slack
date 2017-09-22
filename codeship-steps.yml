@@ -1,12 +1,17 @@
 - service: slack-api
   command: npm run production-lint
+  tag: dev
 - service: slack-api
   command: npm run production-test
+  tag: dev
 - service: slack-api
   type: push
   image_name: databraiddb/slack-api
   encrypted_dockercfg_path: dockercfg.encrypted
+  tag: master
 - service: awsdeployment
   command: aws ecs register-task-definition --cli-input-json file:///deploy/tasks/slack-api.json
+  tag: master
 - service: awsdeployment
   command: aws ecs update-service --cluster databraid-cluster --service slack-api-service --task-definition slack-api
+  tag: master
