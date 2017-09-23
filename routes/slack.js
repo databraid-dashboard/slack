@@ -62,6 +62,11 @@ router.get('/token', (req, res) => {
     });
 });
 
+router.delete('/logout', (req, res) => {
+  setOption('oauth_token', '')
+    .then(() => res.sendStatus(200));
+});
+
 function setEvents(io) {
   // This gets hit after a message is sent inside the literal slack app
   // and picked up by the slack 'app' (https://api.slack.com/apps/Databraid_Slack_App)
