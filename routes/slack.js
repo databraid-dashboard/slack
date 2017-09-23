@@ -40,7 +40,7 @@ router.get('/auth/redirect', (req, res) => {
 });
 
 router.get('/auth', (req, res) => {
-  const buttonHTML = `<a href="https://slack.com/oauth/authorize?scope=channels:history,reactions:read,users:read&client_id=${process
+  const buttonHTML = `<a href="https://slack.com/oauth/authorize?scope=channels:history,users:read&client_id=${process
     .env.SLACK_CLIENT_ID}&redirect_uri=${process.env
     .REDIRECT_URI}"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>`;
   return res.send(buttonHTML);
