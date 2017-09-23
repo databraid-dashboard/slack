@@ -34,7 +34,7 @@ router.get('/auth/redirect', (req, res) => {
       setOption('oauth_token', JSONresponse.access_token);
       updateAllUserData(JSONresponse.access_token);
       updateAllChannelData(JSONresponse.access_token);
-      res.redirect('/');
+      res.redirect(process.env.SLACK_SPA_URL);
     }
   });
 });
