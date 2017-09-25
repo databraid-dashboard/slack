@@ -2,8 +2,6 @@
 
 # Databraid Slack API
 
-
-
 ## Usage
 
 Before beginning make sure you have [Docker](https://www.docker.com/) installed and running, then do:
