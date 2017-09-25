@@ -2,6 +2,7 @@
 
 # Databraid Slack API
 
+
 ## Description
 
 An Express server/router which serves as the backend for the Databraid Slack Widget.  This is used in conjunction with the Databraid Slack SPA.  It is built to run as a container within Docker.
@@ -36,3 +37,12 @@ Once these are set up, you will need to do the following to run the API:
 1. If this is local, start localtunnel or ngrok.
 1. In a terminal window, navigate to your slack-api files and run `npm start`.
 1. If you need to shutdown or restart the server, exit out of the running process and then run `npm run down` to stop the container.
+
+
+Testing and linting can all be done respectively with:
+
+```
+npm test
+npm run lint
+```
+
